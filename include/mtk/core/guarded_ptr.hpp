@@ -30,7 +30,7 @@ public:
 	{ }
 
 	constexpr
-	guarded_ptr(T* p, const Validator& v = Validator()) noexcept(_nothrow_validator_copy) :
+	guarded_ptr(pointer p, const Validator& v = Validator()) noexcept(_nothrow_validator_copy) :
 		Validator(v),
 		m_ptr(p)
 	{ }
@@ -38,7 +38,7 @@ public:
 	template<class U
 		,class V
 #ifndef MTK_DOXYGEN
-		,_require<std::is_same_v<T, const U>> = 0
+		,_require<std::is_convertible_v<U*, T*>> = 0
 #endif
 	>
 	guarded_ptr(guarded_ptr<U, V> p, const Validator& v = Validator()) noexcept(_nothrow_validator_copy) :
@@ -49,7 +49,7 @@ public:
 
 	constexpr
 	guarded_ptr&
-	operator=(T* rhs) noexcept { m_ptr = rhs; return *this; }
+	operator=(pointer rhs) noexcept { m_ptr = rhs; return *this; }
 
 	constexpr
 	operator T*() const noexcept { return m_ptr; }
@@ -66,37 +66,13 @@ public:
 	element_type&
 	operator[](std::size_t idx) const noexcept(_nothrow_validator) { this->_verify(); return *(m_ptr + idx); }
 
+
+
 	pointer
 	get() const noexcept { return m_ptr; }
 
 	const validator_type&
 	validator() const noexcept { return static_cast<const Validator&>(*this); }
-
-
-
-	friend constexpr bool operator==(guarded_ptr lhs, guarded_ptr rhs) noexcept { return (lhs.m_ptr == rhs.m_ptr); }
-	friend constexpr bool operator==(guarded_ptr lhs, pointer rhs) noexcept { return (lhs.m_ptr == rhs); }
-	friend constexpr bool operator==(pointer lhs, guarded_ptr rhs) noexcept { return (lhs == rhs.m_ptr); }
-
-	friend constexpr bool operator!=(guarded_ptr lhs, guarded_ptr rhs) noexcept { return (lhs.m_ptr != rhs.m_ptr); }
-	friend constexpr bool operator!=(guarded_ptr lhs, pointer rhs) noexcept { return (lhs.m_ptr != rhs); }
-	friend constexpr bool operator!=(pointer lhs, guarded_ptr rhs) noexcept { return (lhs != rhs.m_ptr); }
-
-	friend constexpr bool operator<(guarded_ptr lhs, guarded_ptr rhs) noexcept { return (lhs.m_ptr < rhs.m_ptr); }
-	friend constexpr bool operator<(guarded_ptr lhs, pointer rhs) noexcept { return (lhs.m_ptr < rhs); }
-	friend constexpr bool operator<(pointer lhs, guarded_ptr rhs) noexcept { return (lhs < rhs.m_ptr); }
-
-	friend constexpr bool operator>(guarded_ptr lhs, guarded_ptr rhs) noexcept { return (lhs.m_ptr > rhs.m_ptr); }
-	friend constexpr bool operator>(guarded_ptr lhs, pointer rhs) noexcept { return (lhs.m_ptr > rhs); }
-	friend constexpr bool operator>(pointer lhs, guarded_ptr rhs) noexcept { return (lhs > rhs.m_ptr); }
-
-	friend constexpr bool operator<=(guarded_ptr lhs, guarded_ptr rhs) noexcept { return (lhs.m_ptr <= rhs.m_ptr); }
-	friend constexpr bool operator<=(guarded_ptr lhs, pointer rhs) noexcept { return (lhs.m_ptr <= rhs); }
-	friend constexpr bool operator<=(pointer lhs, guarded_ptr rhs) noexcept { return (lhs <= rhs.m_ptr); }
-
-	friend constexpr bool operator>=(guarded_ptr lhs, guarded_ptr rhs) noexcept { return (lhs.m_ptr >= rhs.m_ptr); }
-	friend constexpr bool operator>=(guarded_ptr lhs, pointer rhs) noexcept { return (lhs.m_ptr >= rhs); }
-	friend constexpr bool operator>=(pointer lhs, guarded_ptr rhs) noexcept { return (lhs >= rhs.m_ptr); }
 
 
 
