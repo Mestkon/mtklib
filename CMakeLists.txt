@@ -21,6 +21,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/pointer.hpp
     include/mtk/core/types.hpp
     include/mtk/core/version.hpp
+    include/mtk/core/impl/actor_base.hpp
+    include/mtk/core/impl/move.hpp
     include/mtk/core/impl/pointer_validators.hpp
     include/mtk/core/impl/require.hpp
 
