@@ -70,12 +70,12 @@ public:
 	get() const noexcept { return m_ptr; }
 
 	const validator_type&
-	validator() const noexcept { return static_cast<const Validator&>(*this); }
+	get_validator() const noexcept { return static_cast<const Validator&>(*this); }
 
 private:
 	void _verify(pointer p) const noexcept(_nothrow_validator)
 	{
-		this->validator()(p);
+		this->get_validator()(p);
 	}
 
 
