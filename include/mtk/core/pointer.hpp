@@ -1,9 +1,8 @@
 #ifndef MTK_CORE_POINTER_HPP
 #define MTK_CORE_POINTER_HPP
 
-#include <mtk/core/impl/pointer_validators.hpp>
-
 #include <mtk/core/guarded_ptr.hpp>
+#include <mtk/core/impl/pointer_validators.hpp>
 
 namespace mtk {
 
