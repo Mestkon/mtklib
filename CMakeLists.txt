@@ -15,18 +15,10 @@ endif()
 
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/assert.hpp
-    include/mtk/core/guarded_ptr.hpp
-    include/mtk/core/not_nullptr.hpp
-    include/mtk/core/nullptr_exception.hpp
-    include/mtk/core/pointer.hpp
     include/mtk/core/types.hpp
     include/mtk/core/version.hpp
-    include/mtk/core/impl/actor_base.hpp
     include/mtk/core/impl/move.hpp
-    include/mtk/core/impl/pointer_validators.hpp
     include/mtk/core/impl/require.hpp
 
     src/mtk/core/assert.cpp
-    src/mtk/core/nullptr_exception.cpp
-    src/mtk/core/pointer_validators.cpp
 )
