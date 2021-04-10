@@ -4,6 +4,7 @@
 #include <mtk/core/assert.hpp>
 #include <mtk/core/nullptr_exception.hpp>
 #include <mtk/core/types.hpp>
+#include <mtk/core/impl/declval.hpp>
 #include <mtk/core/impl/require.hpp>
 
 #include <limits>
@@ -26,6 +27,16 @@ public:
 	constexpr
 	pointer(pointer_type ptr) noexcept :
 		m_ptr(ptr)
+	{ }
+
+	template<class SmartPtr
+#ifndef MTK_DOXYGEN
+		,_require<std::is_convertible_v<decltype(mtk::_declval<const SmartPtr&>().get()), pointer_type>> = 0
+#endif
+	>
+	constexpr
+	pointer(const SmartPtr& ptr) noexcept(noexcept(ptr.get())) :
+		m_ptr(ptr.get())
 	{ }
 
 	constexpr
@@ -132,6 +143,16 @@ public:
 	constexpr
 	pointer(U p) noexcept :
 		m_ptr(p)
+	{ }
+
+	template<class SmartPtr
+#ifndef MTK_DOXYGEN
+		,_require<std::is_convertible_v<decltype(mtk::_declval<const SmartPtr&>().get())(*)[], element_type(*)[]>> = 0
+#endif
+	>
+	constexpr
+	pointer(const SmartPtr& ptr) noexcept(noexcept(ptr.get())) :
+		m_ptr(ptr.get())
 	{ }
 
 	template<class U

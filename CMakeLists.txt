@@ -19,6 +19,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/pointer.hpp
     include/mtk/core/types.hpp
     include/mtk/core/version.hpp
+    include/mtk/core/impl/declval.hpp
     include/mtk/core/impl/move.hpp
     include/mtk/core/impl/require.hpp
 
