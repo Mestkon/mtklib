@@ -148,7 +148,7 @@ public:
 	}
 
 	constexpr
-	operator pointer_type() noexcept
+	operator pointer_type() const noexcept
 	{
 		return m_ptr;
 	}
