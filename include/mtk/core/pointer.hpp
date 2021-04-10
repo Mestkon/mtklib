@@ -107,7 +107,8 @@ template<class T> auto operator+(pointer<T>, ptrdiff_t) = delete;
 template<class T> auto operator+(ptrdiff_t, pointer<T>) = delete;
 template<class T> auto operator-(pointer<T>, ptrdiff_t) = delete;
 template<class T> auto operator-(pointer<T>, pointer<T>) = delete;
-
+template<class T> auto operator-(typename pointer<T>::pointer_type, pointer<T>) = delete;
+template<class T> auto operator-(pointer<T>, typename pointer<T>::pointer_type) = delete;
 
 
 template<class T>
@@ -318,6 +319,20 @@ public:
 		if (!lhs || !rhs)
 			mtk::_throw_nullptr_exception();
 		return (lhs.m_ptr - rhs.m_ptr);
+	}
+
+	friend constexpr
+	ptrdiff_t
+	operator-(pointer_type lhs, pointer rhs)
+	{
+		return (pointer(lhs) - rhs);
+	}
+
+	friend constexpr
+	ptrdiff_t
+	operator-(pointer lhs, pointer_type rhs)
+	{
+		return (lhs - pointer(rhs));
 	}
 
 private:
