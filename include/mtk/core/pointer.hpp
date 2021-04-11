@@ -2,7 +2,6 @@
 #define MTK_CORE_POINTER_HPP
 
 #include <mtk/core/assert.hpp>
-#include <mtk/core/nullptr_exception.hpp>
 #include <mtk/core/types.hpp>
 #include <mtk/core/impl/declval.hpp>
 #include <mtk/core/impl/pointer_validator.hpp>
