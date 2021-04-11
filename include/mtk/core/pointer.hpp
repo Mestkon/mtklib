@@ -5,6 +5,7 @@
 #include <mtk/core/nullptr_exception.hpp>
 #include <mtk/core/types.hpp>
 #include <mtk/core/impl/declval.hpp>
+#include <mtk/core/impl/pointer_validator.hpp>
 #include <mtk/core/impl/require.hpp>
 
 #include <limits>
@@ -12,12 +13,14 @@
 
 namespace mtk {
 
-template<class T>
+template<class T
+	,class Validator = default_pointer_validator>
 class pointer
 {
 public:
 	using pointer_type = T*;
 	using element_type = T;
+	using validator_type = Validator;
 
 	constexpr
 	pointer() noexcept :
@@ -70,8 +73,7 @@ public:
 	element_type&
 	operator*() const
 	{
-		if (!m_ptr)
-			mtk::_throw_nullptr_exception();
+		validator_type()(m_ptr);
 		return *m_ptr;
 	}
 
@@ -79,8 +81,7 @@ public:
 	pointer_type
 	operator->() const
 	{
-		if (!m_ptr)
-			mtk::_throw_nullptr_exception();
+		validator_type()(m_ptr);
 		return m_ptr;
 	}
 
@@ -107,27 +108,29 @@ private:
 	pointer_type m_ptr;
 };
 
-template<class T> auto operator++(pointer<T>&) = delete;
-template<class T> auto operator++(pointer<T>&, int) = delete;
-template<class T> auto operator--(pointer<T>&) = delete;
-template<class T> auto operator--(pointer<T>&, int) = delete;
+template<class T, class V> auto operator++(pointer<T, V>&) = delete;
+template<class T, class V> auto operator++(pointer<T, V>&, int) = delete;
+template<class T, class V> auto operator--(pointer<T, V>&) = delete;
+template<class T, class V> auto operator--(pointer<T, V>&, int) = delete;
 
-template<class T> auto operator+=(pointer<T>&, ptrdiff_t) = delete;
-template<class T> auto operator-=(pointer<T>&, ptrdiff_t) = delete;
-template<class T> auto operator+(pointer<T>, ptrdiff_t) = delete;
-template<class T> auto operator+(ptrdiff_t, pointer<T>) = delete;
-template<class T> auto operator-(pointer<T>, ptrdiff_t) = delete;
-template<class T> auto operator-(pointer<T>, pointer<T>) = delete;
-template<class T> auto operator-(typename pointer<T>::pointer_type, pointer<T>) = delete;
-template<class T> auto operator-(pointer<T>, typename pointer<T>::pointer_type) = delete;
+template<class T, class V> auto operator+=(pointer<T, V>&, ptrdiff_t) = delete;
+template<class T, class V> auto operator-=(pointer<T, V>&, ptrdiff_t) = delete;
+template<class T, class V> auto operator+(pointer<T, V>, ptrdiff_t) = delete;
+template<class T, class V> auto operator+(ptrdiff_t, pointer<T, V>) = delete;
+template<class T, class V> auto operator-(pointer<T, V>, ptrdiff_t) = delete;
+template<class T, class V> auto operator-(pointer<T, V>, pointer<T, V>) = delete;
+template<class T, class V> auto operator-(typename pointer<T, V>::pointer_type, pointer<T, V>) = delete;
+template<class T, class V> auto operator-(pointer<T, V>, typename pointer<T, V>::pointer_type) = delete;
 
 
-template<class T>
-class pointer<T[]>
+template<class T
+	,class Validator>
+class pointer<T[], Validator>
 {
 public:
 	using pointer_type = T*;
 	using element_type = T;
+	using validator_type = Validator;
 
 	constexpr
 	pointer() noexcept :
@@ -192,8 +195,7 @@ public:
 	element_type&
 	operator*() const
 	{
-		if (!m_ptr)
-			mtk::_throw_nullptr_exception();
+		validator_type()(m_ptr);
 		return *m_ptr;
 	}
 
@@ -201,8 +203,7 @@ public:
 	pointer_type
 	operator->() const
 	{
-		if (!m_ptr)
-			mtk::_throw_nullptr_exception();
+		validator_type()(m_ptr);
 		return m_ptr;
 	}
 
@@ -253,8 +254,7 @@ public:
 	pointer&
 	operator++(pointer& rhs)
 	{
-		if (!rhs)
-			mtk::_throw_nullptr_exception();
+		validator_type()(rhs.m_ptr);
 		++rhs.m_ptr;
 		return rhs;
 	}
@@ -272,8 +272,7 @@ public:
 	pointer&
 	operator--(pointer& rhs)
 	{
-		if (!rhs)
-			mtk::_throw_nullptr_exception();
+		validator_type()(rhs.m_ptr);
 		--rhs.m_ptr;
 		return rhs;
 	}
@@ -293,8 +292,7 @@ public:
 	pointer&
 	operator+=(pointer& lhs, ptrdiff_t rhs)
 	{
-		if (!lhs)
-			mtk::_throw_nullptr_exception();
+		validator_type()(lhs.m_ptr);
 		lhs.m_ptr += rhs;
 		return lhs;
 	}
@@ -319,8 +317,7 @@ public:
 	pointer&
 	operator-=(pointer& lhs, ptrdiff_t rhs)
 	{
-		if (!lhs)
-			mtk::_throw_nullptr_exception();
+		validator_type()(lhs.m_ptr);
 		lhs.m_ptr -= rhs;
 		return lhs;
 	}
@@ -339,8 +336,8 @@ public:
 	{
 		if (!lhs && !rhs)
 			return ptrdiff_t(0);
-		else if (!lhs || !rhs)
-			mtk::_throw_nullptr_exception();
+		validator_type()(lhs.m_ptr);
+		validator_type()(rhs.m_ptr);
 		return (lhs.m_ptr - rhs.m_ptr);
 	}
 
@@ -362,10 +359,11 @@ private:
 	pointer_type m_ptr;
 };
 
-template<class T>
+template<class T
+	,class V>
 constexpr
 void
-swap(pointer<T>& a, pointer<T>& b) noexcept
+swap(pointer<T, V>& a, pointer<T, V>& b) noexcept
 {
 	a.swap(b);
 }

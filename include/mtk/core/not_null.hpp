@@ -4,25 +4,27 @@
 #include <mtk/core/assert.hpp>
 #include <mtk/core/nullptr_exception.hpp>
 #include <mtk/core/impl/declval.hpp>
+#include <mtk/core/impl/pointer_validator.hpp>
 #include <mtk/core/impl/require.hpp>
 
 #include <limits>
 
 namespace mtk {
 
-template<class T>
+template<class T
+	,class Validator = default_pointer_validator>
 class not_null
 {
 public:
 	using pointer_type = T*;
 	using element_type = T;
+	using validator_type = Validator;
 
 	constexpr
 	not_null(pointer_type ptr) :
 		m_ptr(ptr)
 	{
-		if (!m_ptr)
-			mtk::_throw_nullptr_exception();
+		validator_type()(m_ptr);
 	}
 
 	template<class SmartPtr
@@ -34,16 +36,14 @@ public:
 	not_null(const SmartPtr& ptr) :
 		m_ptr(ptr.get())
 	{
-		if (!m_ptr)
-			mtk::_throw_nullptr_exception();
+		validator_type()(m_ptr);
 	}
 
 	constexpr
 	not_null&
 	operator=(pointer_type rhs)
 	{
-		if (!rhs)
-			mtk::_throw_nullptr_exception();
+		validator_type()(rhs);
 		m_ptr = rhs;
 		return *this;
 	}
@@ -88,8 +88,7 @@ public:
 	void
 	reset(pointer_type ptr)
 	{
-		if (!ptr)
-			mtk::_throw_nullptr_exception();
+		validator_type()(ptr);
 		m_ptr = ptr;
 	}
 
@@ -106,28 +105,30 @@ private:
 	pointer_type m_ptr;
 };
 
-template<class T> auto operator++(not_null<T>&) = delete;
-template<class T> auto operator++(not_null<T>&, int) = delete;
-template<class T> auto operator--(not_null<T>&) = delete;
-template<class T> auto operator--(not_null<T>&, int) = delete;
+template<class T, class V> auto operator++(not_null<T, V>&) = delete;
+template<class T, class V> auto operator++(not_null<T, V>&, int) = delete;
+template<class T, class V> auto operator--(not_null<T, V>&) = delete;
+template<class T, class V> auto operator--(not_null<T, V>&, int) = delete;
 
-template<class T> auto operator+=(not_null<T>&, ptrdiff_t) = delete;
-template<class T> auto operator-=(not_null<T>&, ptrdiff_t) = delete;
-template<class T> auto operator+(not_null<T>, ptrdiff_t) = delete;
-template<class T> auto operator+(ptrdiff_t, not_null<T>) = delete;
-template<class T> auto operator-(not_null<T>, ptrdiff_t) = delete;
-template<class T> auto operator-(not_null<T>, not_null<T>) = delete;
-template<class T> auto operator-(typename not_null<T>::pointer_type, not_null<T>) = delete;
-template<class T> auto operator-(not_null<T>, typename not_null<T>::pointer_type) = delete;
+template<class T, class V> auto operator+=(not_null<T, V>&, ptrdiff_t) = delete;
+template<class T, class V> auto operator-=(not_null<T, V>&, ptrdiff_t) = delete;
+template<class T, class V> auto operator+(not_null<T, V>, ptrdiff_t) = delete;
+template<class T, class V> auto operator+(ptrdiff_t, not_null<T, V>) = delete;
+template<class T, class V> auto operator-(not_null<T, V>, ptrdiff_t) = delete;
+template<class T, class V> auto operator-(not_null<T, V>, not_null<T, V>) = delete;
+template<class T, class V> auto operator-(typename not_null<T, V>::pointer_type, not_null<T, V>) = delete;
+template<class T, class V> auto operator-(not_null<T, V>, typename not_null<T, V>::pointer_type) = delete;
 
 
 
-template<class T>
-class not_null<T[]>
+template<class T
+	,class Validator>
+class not_null<T[], Validator>
 {
 public:
 	using pointer_type = T*;
 	using element_type = T;
+	using validator_type = Validator;
 
 	template<class U
 #ifndef MTK_DOXYGEN
@@ -139,8 +140,7 @@ public:
 	not_null(U p) :
 		m_ptr(p)
 	{
-		if (!p)
-			mtk::_throw_nullptr_exception();
+		validator_type()(m_ptr);
 	}
 
 	template<class SmartPtr
@@ -152,8 +152,7 @@ public:
 	not_null(const SmartPtr& ptr) :
 		m_ptr(ptr.get())
 	{
-		if (!m_ptr)
-			mtk::_throw_nullptr_exception();
+		validator_type()(m_ptr);
 	}
 
 	template<class U
@@ -166,8 +165,7 @@ public:
 	not_null&
 	operator=(U rhs)
 	{
-		if (!rhs)
-			mtk::_throw_nullptr_exception();
+		validator_type()(rhs);
 		m_ptr = rhs;
 		return *this;
 	}
@@ -234,8 +232,7 @@ public:
 	void
 	reset(U ptr)
 	{
-		if (!ptr)
-			mtk::_throw_nullptr_exception();
+		validator_type()(ptr);
 		m_ptr = ptr;
 	}
 
@@ -351,10 +348,11 @@ private:
 	pointer_type m_ptr;
 };
 
-template<class T>
+template<class T
+	,class V>
 constexpr
 void
-swap(not_null<T>& a, not_null<T>& b) noexcept
+swap(not_null<T, V>& a, not_null<T, V>& b) noexcept
 {
 	a.swap(b);
 }
