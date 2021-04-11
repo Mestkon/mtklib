@@ -44,7 +44,6 @@ public:
 	{
 		if (!rhs)
 			mtk::_throw_nullptr_exception();
-
 		m_ptr = rhs;
 		return *this;
 	}
@@ -91,7 +90,6 @@ public:
 	{
 		if (!ptr)
 			mtk::_throw_nullptr_exception();
-
 		m_ptr = ptr;
 	}
 
@@ -170,7 +168,6 @@ public:
 	{
 		if (!rhs)
 			mtk::_throw_nullptr_exception();
-
 		m_ptr = rhs;
 		return *this;
 	}
@@ -239,7 +236,6 @@ public:
 	{
 		if (!ptr)
 			mtk::_throw_nullptr_exception();
-
 		m_ptr = ptr;
 	}
 
@@ -251,6 +247,8 @@ public:
 		m_ptr = other.m_ptr;
 		other.m_ptr = p;
 	}
+
+
 
 	friend constexpr
 	not_null&
