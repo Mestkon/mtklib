@@ -31,7 +31,7 @@ public:
 #endif
 	>
 	constexpr
-	not_null(const SmartPtr& ptr) noexcept(noexcept(ptr.get())) :
+	not_null(const SmartPtr& ptr) :
 		m_ptr(ptr.get())
 	{
 		if (!m_ptr)
@@ -86,7 +86,7 @@ public:
 
 	constexpr
 	void
-	reset(pointer_type ptr) noexcept
+	reset(pointer_type ptr)
 	{
 		if (!ptr)
 			mtk::_throw_nullptr_exception();
@@ -136,7 +136,7 @@ public:
 #endif
 	>
 	constexpr
-	not_null(U p) noexcept :
+	not_null(U p) :
 		m_ptr(p)
 	{
 		if (!p)
@@ -149,7 +149,7 @@ public:
 #endif
 	>
 	constexpr
-	not_null(const SmartPtr& ptr) noexcept(noexcept(ptr.get())) :
+	not_null(const SmartPtr& ptr) :
 		m_ptr(ptr.get())
 	{
 		if (!m_ptr)
@@ -164,7 +164,7 @@ public:
 	>
 	constexpr
 	not_null&
-	operator=(U rhs) noexcept
+	operator=(U rhs)
 	{
 		if (!rhs)
 			mtk::_throw_nullptr_exception();
@@ -207,7 +207,7 @@ public:
 
 	constexpr
 	element_type&
-	operator[](size_t idx) const
+	operator[](size_t idx) const noexcept
 	{
 		MTK_ASSERT(idx <= static_cast<size_t>(std::numeric_limits<ptrdiff_t>::max()));
 		return *(*this + static_cast<ptrdiff_t>(idx));
@@ -218,7 +218,7 @@ public:
 		,_require<std::is_integral_v<Integer>> = 0>
 	constexpr
 	element_type&
-	operator[](Integer idx) const
+	operator[](Integer idx) const noexcept
 	{
 		return (*this)[static_cast<size_t>(idx)];
 	}
@@ -232,7 +232,7 @@ public:
 	>
 	constexpr
 	void
-	reset(U ptr) noexcept
+	reset(U ptr)
 	{
 		if (!ptr)
 			mtk::_throw_nullptr_exception();
@@ -252,7 +252,7 @@ public:
 
 	friend constexpr
 	not_null&
-	operator++(not_null& rhs)
+	operator++(not_null& rhs) noexcept
 	{
 		++rhs.m_ptr;
 		return rhs;
@@ -260,7 +260,7 @@ public:
 
 	friend constexpr
 	not_null
-	operator++(not_null& lhs, int)
+	operator++(not_null& lhs, int) noexcept
 	{
 		auto cp = lhs;
 		++lhs;
@@ -269,7 +269,7 @@ public:
 
 	friend constexpr
 	not_null&
-	operator--(not_null& rhs)
+	operator--(not_null& rhs) noexcept
 	{
 		--rhs.m_ptr;
 		return rhs;
@@ -277,7 +277,7 @@ public:
 
 	friend constexpr
 	not_null
-	operator--(not_null& lhs, int)
+	operator--(not_null& lhs, int) noexcept
 	{
 		auto cp = lhs;
 		--lhs;
@@ -288,7 +288,7 @@ public:
 
 	friend constexpr
 	not_null&
-	operator+=(not_null& lhs, ptrdiff_t rhs)
+	operator+=(not_null& lhs, ptrdiff_t rhs) noexcept
 	{
 		lhs.m_ptr += rhs;
 		return lhs;
@@ -296,7 +296,7 @@ public:
 
 	friend constexpr
 	not_null
-	operator+(not_null lhs, ptrdiff_t rhs)
+	operator+(not_null lhs, ptrdiff_t rhs) noexcept
 	{
 		lhs += rhs;
 		return lhs;
@@ -304,7 +304,7 @@ public:
 
 	friend constexpr
 	not_null
-	operator+(ptrdiff_t lhs, not_null rhs)
+	operator+(ptrdiff_t lhs, not_null rhs) noexcept
 	{
 		rhs += lhs;
 		return rhs;
@@ -312,7 +312,7 @@ public:
 
 	friend constexpr
 	not_null&
-	operator-=(not_null& lhs, ptrdiff_t rhs)
+	operator-=(not_null& lhs, ptrdiff_t rhs) noexcept
 	{
 		lhs.m_ptr -= rhs;
 		return lhs;
@@ -320,7 +320,7 @@ public:
 
 	friend constexpr
 	not_null
-	operator-(not_null lhs, ptrdiff_t rhs)
+	operator-(not_null lhs, ptrdiff_t rhs) noexcept
 	{
 		lhs -= rhs;
 		return lhs;
@@ -328,21 +328,21 @@ public:
 
 	friend constexpr
 	ptrdiff_t
-	operator-(not_null lhs, not_null rhs)
+	operator-(not_null lhs, not_null rhs) noexcept
 	{
 		return (lhs.m_ptr - rhs.m_ptr);
 	}
 
 	friend constexpr
 	ptrdiff_t
-	operator-(pointer_type lhs, not_null rhs)
+	operator-(pointer_type lhs, not_null rhs) noexcept
 	{
 		return (pointer(lhs) - rhs);
 	}
 
 	friend constexpr
 	ptrdiff_t
-	operator-(not_null lhs, pointer_type rhs)
+	operator-(not_null lhs, pointer_type rhs) noexcept
 	{
 		return (lhs - pointer(rhs));
 	}
