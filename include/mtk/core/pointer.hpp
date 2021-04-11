@@ -337,7 +337,9 @@ public:
 	ptrdiff_t
 	operator-(pointer lhs, pointer rhs)
 	{
-		if (!lhs || !rhs)
+		if (!lhs && !rhs)
+			return ptrdiff_t(0);
+		else if (!lhs || !rhs)
 			mtk::_throw_nullptr_exception();
 		return (lhs.m_ptr - rhs.m_ptr);
 	}
