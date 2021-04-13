@@ -79,6 +79,20 @@ public:
 		m_size(s.size())
 	{ }
 
+	template<class StdStringView
+#ifndef MTK_DOXYGEN
+		,decltype(mtk::_declval<StdStringView&>().remove_prefix(size_t()))* = nullptr
+		,decltype(mtk::_declval<StdStringView&>().remove_suffix(size_t()))* = nullptr
+		,decltype(mtk::_declval<StdStringView&>().substr(size_t()))* = nullptr
+		,decltype(mtk::_declval<StdStringView&>().find_first_not_of(mtk::_declval<StdStringView&>()))* = nullptr
+#endif
+	>
+	operator StdStringView() const noexcept
+	{
+		return StdStringView(this->data(), this->size() + 1);
+	}
+
+
 	constexpr
 	const_iterator
 	begin() const noexcept
