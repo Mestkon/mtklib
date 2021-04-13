@@ -22,6 +22,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/types.hpp
     include/mtk/core/unique_ptr.hpp
     include/mtk/core/version.hpp
+    include/mtk/core/zstring_view.hpp
     include/mtk/core/impl/declval.hpp
     include/mtk/core/impl/move.hpp
     include/mtk/core/impl/pointer_validator.hpp
@@ -29,4 +30,5 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 
     src/mtk/core/assert.cpp
     src/mtk/core/nullptr_exception.cpp
+    src/mtk/core/zstring_view.cpp
 )
