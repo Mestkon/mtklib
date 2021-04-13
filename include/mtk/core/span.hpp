@@ -41,7 +41,9 @@ public:
 	span(U* data, size_type count) :
 		m_ptr(data),
 		m_size(count)
-	{ }
+	{
+		MTK_ASSERT((count == 0) || bool(data));
+	}
 
 	template<size_t N>
 	constexpr
@@ -76,14 +78,14 @@ public:
 	iterator
 	begin() const noexcept
 	{
-		return m_ptr;
+		return this->data();
 	}
 
 	constexpr
 	iterator
 	end() const noexcept
 	{
-		return m_ptr + m_size;
+		return this->data() + this->size();
 	}
 
 	constexpr
@@ -114,7 +116,7 @@ public:
 	pointer
 	data() const noexcept
 	{
-		return this->begin();
+		return m_ptr;
 	}
 
 	constexpr
