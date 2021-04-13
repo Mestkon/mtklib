@@ -97,7 +97,7 @@ public:
 	void
 	swap(not_null& other) noexcept
 	{
-		auto p = m_ptr;
+		const auto p = m_ptr;
 		m_ptr = other.m_ptr;
 		other.m_ptr = p;
 	}
@@ -277,7 +277,7 @@ public:
 	not_null
 	operator--(not_null& lhs, int) noexcept
 	{
-		auto cp = lhs;
+		const auto cp = lhs;
 		--lhs;
 		return cp;
 	}

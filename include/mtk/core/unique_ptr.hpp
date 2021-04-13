@@ -128,7 +128,7 @@ public:
 	void
 	swap(unique_ptr& other) noexcept
 	{
-		auto p = m_ptr;
+		const auto p = m_ptr;
 		m_ptr = other.m_ptr;
 		other.m_ptr = p;
 	}
@@ -260,7 +260,7 @@ public:
 	void
 	swap(unique_ptr& other) noexcept
 	{
-		auto p = m_ptr;
+		const auto p = m_ptr;
 		m_ptr = other.m_ptr;
 		other.m_ptr = p;
 	}
