@@ -6,6 +6,7 @@
 #include <mtk/core/impl/declval.hpp>
 #include <mtk/core/impl/pointer_validator.hpp>
 #include <mtk/core/impl/require.hpp>
+#include <mtk/core/impl/swap.hpp>
 
 #include <limits>
 #include <type_traits>
@@ -97,9 +98,7 @@ public:
 	void
 	swap(not_null& other) noexcept
 	{
-		const auto p = m_ptr;
-		m_ptr = other.m_ptr;
-		other.m_ptr = p;
+		mtk::_swap(m_ptr, other.m_ptr);
 	}
 
 private:
@@ -241,9 +240,7 @@ public:
 	void
 	swap(not_null& other) noexcept
 	{
-		auto p = m_ptr;
-		m_ptr = other.m_ptr;
-		other.m_ptr = p;
+		mtk::_swap(m_ptr, other.m_ptr);
 	}
 
 

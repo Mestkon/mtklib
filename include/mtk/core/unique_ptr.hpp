@@ -5,6 +5,7 @@
 #include <mtk/core/impl/move.hpp>
 #include <mtk/core/impl/pointer_validator.hpp>
 #include <mtk/core/impl/require.hpp>
+#include <mtk/core/impl/swap.hpp>
 
 #include <type_traits>
 
@@ -111,9 +112,7 @@ public:
 	pointer_type
 	release() noexcept
 	{
-		auto p = m_ptr;
-		m_ptr = nullptr;
-		return p;
+		return mtk::_exchange(m_ptr, nullptr);
 	}
 
 	void
@@ -128,9 +127,7 @@ public:
 	void
 	swap(unique_ptr& other) noexcept
 	{
-		const auto p = m_ptr;
-		m_ptr = other.m_ptr;
-		other.m_ptr = p;
+		mtk::_swap(m_ptr, other.m_ptr);
 	}
 
 private:
@@ -236,9 +233,7 @@ public:
 	pointer_type
 	release() noexcept
 	{
-		auto p = m_ptr;
-		m_ptr = nullptr;
-		return p;
+		return mtk::_exchange(m_ptr, nullptr);
 	}
 
 	template<class U = std::nullptr_t
@@ -260,9 +255,7 @@ public:
 	void
 	swap(unique_ptr& other) noexcept
 	{
-		const auto p = m_ptr;
-		m_ptr = other.m_ptr;
-		other.m_ptr = p;
+		mtk::_swap(m_ptr, other.m_ptr);
 	}
 
 private:

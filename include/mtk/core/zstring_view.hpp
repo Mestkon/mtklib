@@ -5,6 +5,7 @@
 #include <mtk/core/types.hpp>
 #include <mtk/core/impl/declval.hpp>
 #include <mtk/core/impl/require.hpp>
+#include <mtk/core/impl/swap.hpp>
 
 #include <cstring>
 #include <iosfwd>
@@ -183,14 +184,10 @@ public:
 
 	constexpr
 	void
-	swap(zstring_view& v) noexcept
+	swap(zstring_view& other) noexcept
 	{
-		const auto p = m_ptr;
-		const auto s = m_size;
-		m_ptr = v.m_ptr;
-		m_size = v.m_size;
-		v.m_ptr = p;
-		v.m_size = s;
+		mtk::_swap(m_ptr, other.m_ptr);
+		mtk::_swap(m_size, other.m_size);
 	}
 
 private:
@@ -235,6 +232,13 @@ operator>=(zstring_view lhs, zstring_view rhs) noexcept
 std::ostream&
 operator<<(std::ostream& os, zstring_view zv);
 
+inline
+void
+swap(zstring_view& a, zstring_view& b) noexcept
+{
+	a.swap(b);
+}
+
 inline namespace literals {
 inline namespace zstring_view_literals {
 
@@ -244,7 +248,6 @@ operator""_zv(const char* str, size_t len) noexcept
 {
 	return zstring_view(str, len);
 }
-
 
 } // namespace zstring_view_literals
 } // namespace literals
