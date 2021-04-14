@@ -9,6 +9,9 @@ template<class T>
 std::add_rvalue_reference_t<T>
 _declval() noexcept;
 
+template<class... Ts>
+using void_t = void;
+
 } // namespace mtk
 
 #endif

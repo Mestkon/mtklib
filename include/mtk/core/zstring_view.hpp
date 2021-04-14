@@ -63,16 +63,16 @@ public:
 	template<class StdString
 #ifndef MTK_DOXYGEN
 		//check for random std::string specific interface
-		,typename StdString::traits_type* = nullptr
-		,typename StdString::allocator_type* = nullptr
+		,void_t<typename StdString::traits_type>* = nullptr
+		,void_t<typename StdString::allocator_type>* = nullptr
 		,_require<std::is_constructible_v<StdString, const char*>> = 0
 		,_require<std::is_same_v<decltype(mtk::_declval<StdString&>().c_str()), const char*>> = 0
-		,decltype(mtk::_declval<StdString&>().length())* = nullptr
-		,std::remove_reference_t<decltype(mtk::_declval<StdString&>().replace(size_t(), size_t(), mtk::_declval<StdString&>()))>* = nullptr
-		,decltype(mtk::_declval<StdString&>().find_first_not_of(mtk::_declval<StdString&>()))* = nullptr
-		,decltype(StdString::npos)* = nullptr
-		,std::remove_reference_t<decltype(mtk::_declval<StdString&>() += mtk::_declval<StdString&>())>* = nullptr
-		,std::remove_reference_t<decltype(mtk::_declval<StdString&>() += "")>* = nullptr
+		,void_t<decltype(mtk::_declval<StdString&>().length())>* = nullptr
+		,void_t<decltype(mtk::_declval<StdString&>().replace(size_t(), size_t(), mtk::_declval<StdString&>()))>* = nullptr
+		,void_t<decltype(mtk::_declval<StdString&>().find_first_not_of(mtk::_declval<StdString&>()))>* = nullptr
+		,void_t<decltype(StdString::npos)>* = nullptr
+		,void_t<decltype(mtk::_declval<StdString&>() += mtk::_declval<StdString&>())>* = nullptr
+		,void_t<decltype(mtk::_declval<StdString&>() += "")>* = nullptr
 #endif
 	>
 	zstring_view(const StdString& s) :
@@ -82,10 +82,10 @@ public:
 
 	template<class StdStringView
 #ifndef MTK_DOXYGEN
-		,decltype(mtk::_declval<StdStringView&>().remove_prefix(size_t()))* = nullptr
-		,decltype(mtk::_declval<StdStringView&>().remove_suffix(size_t()))* = nullptr
-		,decltype(mtk::_declval<StdStringView&>().substr(size_t()))* = nullptr
-		,decltype(mtk::_declval<StdStringView&>().find_first_not_of(mtk::_declval<StdStringView&>()))* = nullptr
+		,void_t<decltype(mtk::_declval<StdStringView&>().remove_prefix(size_t()))>* = nullptr
+		,void_t<decltype(mtk::_declval<StdStringView&>().remove_suffix(size_t()))>* = nullptr
+		,void_t<decltype(mtk::_declval<StdStringView&>().substr(size_t()))>* = nullptr
+		,void_t<decltype(mtk::_declval<StdStringView&>().find_first_not_of(mtk::_declval<StdStringView&>()))>* = nullptr
 #endif
 	>
 	operator StdStringView() const noexcept
