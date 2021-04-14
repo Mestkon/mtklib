@@ -7,6 +7,7 @@
 #include <mtk/core/impl/require.hpp>
 #include <mtk/core/impl/swap.hpp>
 
+#include <cstddef>
 #include <type_traits>
 
 namespace mtk {
@@ -22,6 +23,10 @@ public:
 	using validator_type = Validator;
 
 	unique_ptr() noexcept :
+		m_ptr(nullptr)
+	{ }
+
+	unique_ptr(std::nullptr_t) noexcept :
 		m_ptr(nullptr)
 	{ }
 
@@ -145,6 +150,10 @@ public:
 	using validator_type = Validator;
 
 	unique_ptr() noexcept :
+		m_ptr(nullptr)
+	{ }
+
+	unique_ptr(std::nullptr_t) noexcept :
 		m_ptr(nullptr)
 	{ }
 
