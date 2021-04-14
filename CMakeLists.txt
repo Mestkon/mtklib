@@ -14,6 +14,7 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
 endif()
 
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+    include/mtk/core/array.hpp
     include/mtk/core/assert.hpp
     include/mtk/core/not_null.hpp
     include/mtk/core/nullptr_exception.hpp
