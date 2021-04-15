@@ -54,6 +54,37 @@ _swap_range(Iter first1, Iter last1, Iter first2)
 	}
 }
 
+template<class Iter>
+constexpr
+bool
+_equal_range(Iter first1, Iter last1, Iter first2)
+{
+	while (first1 != last1) {
+		if (!(*(first1++) == *(first2++)))
+			return false;
+	}
+
+	return true;
+}
+
+template<class Iter>
+constexpr
+bool
+_less_than_range(Iter first1, Iter last1, Iter first2, Iter last2)
+{
+	while ((first1 != last1) && (first2 != last2)) {
+		if (*first1 < *first2)
+			return true;
+		else if (*first2 < *first1)
+			return false;
+
+		++first1;
+		++first2;
+	}
+
+	return ((first1 == last1) && (first2 != last2));
+}
+
 } // namespace impl_array
 
 inline constexpr
@@ -498,12 +529,7 @@ operator==(const array<T, N1>& lhs, const array<T, N2>& rhs)
 	if (lhs.size() != rhs.size())
 		return false;
 
-	for (auto it = lhs.begin(), e = lhs.end(), first = rhs.back(); it != e; ++it, ++first) {
-		if (*it != *first)
-			return false;
-	}
-
-	return true;
+	return impl_array::_equal_range(lhs.begin(), lhs.end(), rhs.begin());
 }
 
 template<class T
@@ -523,22 +549,7 @@ constexpr
 bool
 operator<(const array<T, N1>& lhs, const array<T, N2>& rhs)
 {
-	auto it = lhs.begin();
-	const auto end = lhs.end();
-	auto first = rhs.begin();
-	const auto last = rhs.end();
-
-	while ((it != end) && (first != last)) {
-		if (*it < *first)
-			return true;
-		else if (*first < *it)
-			return false;
-
-		++it;
-		++first;
-	}
-
-	return ((it == end) && (first != last));
+	return impl_array::_less_than_range(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
 template<class T
