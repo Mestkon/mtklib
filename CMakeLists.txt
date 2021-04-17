@@ -19,11 +19,13 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/not_null.hpp
     include/mtk/core/nullptr_exception.hpp
     include/mtk/core/pointer.hpp
+    include/mtk/core/saturate_cast.hpp
     include/mtk/core/span.hpp
     include/mtk/core/types.hpp
     include/mtk/core/unique_ptr.hpp
     include/mtk/core/version.hpp
     include/mtk/core/zstring_view.hpp
+    include/mtk/core/impl/clamp.hpp
     include/mtk/core/impl/declval.hpp
     include/mtk/core/impl/move.hpp
     include/mtk/core/impl/pointer_validator.hpp
