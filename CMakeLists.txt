@@ -19,6 +19,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/assert.hpp
     include/mtk/core/byte_cast.hpp
     include/mtk/core/flag_operators.hpp
+    include/mtk/core/mem_cast.hpp
     include/mtk/core/narrow_cast.hpp
     include/mtk/core/not_null.hpp
     include/mtk/core/nullptr_exception.hpp
@@ -30,6 +31,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/unique_ptr.hpp
     include/mtk/core/version.hpp
     include/mtk/core/zstring_view.hpp
+    include/mtk/core/impl/addressof.hpp
     include/mtk/core/impl/clamp.hpp
     include/mtk/core/impl/declval.hpp
     include/mtk/core/impl/move.hpp

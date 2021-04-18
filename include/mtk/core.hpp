@@ -5,6 +5,7 @@
 #include <mtk/core/assert.hpp>
 #include <mtk/core/byte_cast.hpp>
 #include <mtk/core/flag_operators.hpp>
+#include <mtk/core/mem_cast.hpp>
 #include <mtk/core/narrow_cast.hpp>
 #include <mtk/core/not_null.hpp>
 #include <mtk/core/nullptr_exception.hpp>
