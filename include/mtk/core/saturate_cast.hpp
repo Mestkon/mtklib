@@ -17,7 +17,7 @@ template<class U
 	,_require<std::is_arithmetic_v<U>> = 0
 	,_require<std::is_arithmetic_v<T>> = 0
 #endif
-	>
+>
 constexpr
 U
 saturate_cast(T val) noexcept
