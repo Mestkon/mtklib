@@ -23,6 +23,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/narrow_cast.hpp
     include/mtk/core/not_null.hpp
     include/mtk/core/nullptr_exception.hpp
+    include/mtk/core/overload.hpp
     include/mtk/core/pointer.hpp
     include/mtk/core/preprocessor.hpp
     include/mtk/core/saturate_cast.hpp
