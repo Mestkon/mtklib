@@ -45,7 +45,6 @@ using std::uintptr_t;
 #endif
 
 } // namespace types
-
 } // namespace mtk
 
 #endif
