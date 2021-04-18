@@ -7,7 +7,7 @@
 #include <type_traits>
 
 namespace mtk {
-namespace casts {
+inline namespace casts {
 
 template<class T
 #ifndef MTK_DOXYGEN
