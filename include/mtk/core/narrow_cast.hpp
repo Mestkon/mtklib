@@ -20,6 +20,10 @@ struct narrowing_exception :
 void
 _throw_narrowing_exception();
 
+
+
+inline namespace casts {
+
 template<class U
 	,class T
 #ifndef MTK_DOXYGEN
@@ -37,6 +41,8 @@ narrow_cast(T val)
 	return static_cast<U>(val);
 }
 
+} // namespace casts
 } // namespace mtk
+
 
 #endif

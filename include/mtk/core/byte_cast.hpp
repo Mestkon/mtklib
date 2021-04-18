@@ -7,6 +7,7 @@
 #include <type_traits>
 
 namespace mtk {
+namespace casts {
 
 template<class T
 #ifndef MTK_DOXYGEN
@@ -22,6 +23,7 @@ byte_cast(T* val) noexcept
 	return reinterpret_cast<cvbyte*>(val);
 }
 
+} // namespace casts
 } // namespace mtk
 
 #endif
