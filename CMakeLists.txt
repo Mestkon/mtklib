@@ -18,6 +18,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/array.hpp
     include/mtk/core/assert.hpp
     include/mtk/core/byte_cast.hpp
+    include/mtk/core/flag_operators.hpp
     include/mtk/core/narrow_cast.hpp
     include/mtk/core/not_null.hpp
     include/mtk/core/nullptr_exception.hpp
