@@ -16,6 +16,7 @@ endif()
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/array.hpp
     include/mtk/core/assert.hpp
+    include/mtk/core/narrow_cast.hpp
     include/mtk/core/not_null.hpp
     include/mtk/core/nullptr_exception.hpp
     include/mtk/core/pointer.hpp
@@ -33,6 +34,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/impl/swap.hpp
 
     src/mtk/core/assert.cpp
+    src/mtk/core/narrow_cast.cpp
     src/mtk/core/nullptr_exception.cpp
     src/mtk/core/zstring_view.cpp
 )
