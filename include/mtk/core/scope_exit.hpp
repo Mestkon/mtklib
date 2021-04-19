@@ -1,5 +1,5 @@
-#ifndef MTK_CORE_SCOPE_GUARD_HPP
-#define MTK_CORE_SCOPE_GUARD_HPP
+#ifndef MTK_CORE_SCOPE_EXIT_HPP
+#define MTK_CORE_SCOPE_EXIT_HPP
 
 #include <mtk/core/impl/move.hpp>
 #include <mtk/core/impl/require.hpp>
@@ -7,17 +7,17 @@
 #include <type_traits>
 
 namespace mtk {
-namespace impl_scope_guard {
+namespace impl_scope_exit {
 
 bool
 _uncaught_exceptions() noexcept;
 
-} // namespace impl_scope_guard
+} // namespace impl_scope_exit
 
 
 
 template<class Func>
-class scope_guard
+class scope_exit
 {
 	static_assert(std::is_invocable_v<Func>, "Func must be invocable with zero arguments");
 public:
@@ -27,20 +27,20 @@ public:
 #endif
 	>
 	constexpr
-	scope_guard(F&& f) :
+	scope_exit(F&& f) :
 		m_func(mtk::_forward<F>(f)),
 		m_active(true)
 	{ }
 
-	scope_guard(const scope_guard&) = delete;
+	scope_exit(const scope_exit&) = delete;
 
-	~scope_guard() noexcept
+	~scope_exit() noexcept
 	{
 		if (m_active)
 			m_func();
 	}
 
-	auto operator=(const scope_guard&) = delete;
+	auto operator=(const scope_exit&) = delete;
 
 	constexpr
 	void
@@ -55,7 +55,7 @@ private:
 };
 
 template<class Func>
-scope_guard(Func) -> scope_guard<Func>;
+scope_exit(Func) -> scope_exit<Func>;
 
 
 
@@ -79,7 +79,7 @@ public:
 
 	~scope_success() noexcept
 	{
-		const bool has_ex = mtk::impl_scope_guard::_uncaught_exceptions();
+		const bool has_ex = mtk::impl_scope_exit::_uncaught_exceptions();
 		if (m_active && !has_ex)
 			m_func();
 	}
@@ -123,7 +123,7 @@ public:
 
 	~scope_failure() noexcept
 	{
-		const bool has_ex = mtk::impl_scope_guard::_uncaught_exceptions();
+		const bool has_ex = mtk::impl_scope_exit::_uncaught_exceptions();
 		if (m_active && has_ex)
 			m_func();
 	}

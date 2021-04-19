@@ -27,7 +27,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/pointer.hpp
     include/mtk/core/preprocessor.hpp
     include/mtk/core/saturate_cast.hpp
-    include/mtk/core/scope_guard.hpp
+    include/mtk/core/scope_exit.hpp
     include/mtk/core/span.hpp
     include/mtk/core/types.hpp
     include/mtk/core/unique_ptr.hpp
@@ -44,6 +44,6 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     src/mtk/core/assert.cpp
     src/mtk/core/narrow_cast.cpp
     src/mtk/core/nullptr_exception.cpp
-    src/mtk/core/scope_guard.cpp
+    src/mtk/core/scope_exit.cpp
     src/mtk/core/zstring_view.cpp
 )
