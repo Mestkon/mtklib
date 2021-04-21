@@ -63,8 +63,8 @@ public:
 	template<class StdString
 #ifndef MTK_DOXYGEN
 		//check for random std::string specific interface
-		,void_t<typename StdString::traits_type>* = nullptr
-		,void_t<typename StdString::allocator_type>* = nullptr
+		,_void_t<typename StdString::traits_type>* = nullptr
+		,_void_t<typename StdString::allocator_type>* = nullptr
 		,_require<std::is_constructible_v<StdString, const char*>> = 0
 		,_require<std::is_same_v<decltype(mtk::_declval<StdString&>().c_str()), const char*>> = 0
 		,void_t<decltype(mtk::_declval<StdString&>().length())>* = nullptr
@@ -82,10 +82,10 @@ public:
 
 	template<class StdStringView
 #ifndef MTK_DOXYGEN
-		,void_t<decltype(mtk::_declval<StdStringView&>().remove_prefix(size_t()))>* = nullptr
-		,void_t<decltype(mtk::_declval<StdStringView&>().remove_suffix(size_t()))>* = nullptr
-		,void_t<decltype(mtk::_declval<StdStringView&>().substr(size_t()))>* = nullptr
-		,void_t<decltype(mtk::_declval<StdStringView&>().find_first_not_of(mtk::_declval<StdStringView&>()))>* = nullptr
+		,_void_t<decltype(mtk::_declval<StdStringView&>().remove_prefix(size_t()))>* = nullptr
+		,_void_t<decltype(mtk::_declval<StdStringView&>().remove_suffix(size_t()))>* = nullptr
+		,_void_t<decltype(mtk::_declval<StdStringView&>().substr(size_t()))>* = nullptr
+		,_void_t<decltype(mtk::_declval<StdStringView&>().find_first_not_of(mtk::_declval<StdStringView&>()))>* = nullptr
 #endif
 	>
 	operator StdStringView() const noexcept

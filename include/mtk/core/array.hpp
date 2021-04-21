@@ -21,7 +21,7 @@ struct _is_subtractable :
 
 template<class T>
 struct _is_subtractable<T
-		,void_t<decltype(mtk::_declval<T>() - mtk::_declval<T>())>
+		,_void_t<decltype(mtk::_declval<T>() - mtk::_declval<T>())>
 	> : std::true_type { };
 
 template<class Iter>
@@ -288,8 +288,8 @@ public:
 
 	template<class InputIter
 #ifndef MTK_DOXYGEN
-		,void_t<decltype(*mtk::_declval<InputIter>())>* = nullptr
-		,void_t<decltype(*(mtk::_declval<InputIter&>()++))>* = nullptr
+		,_void_t<decltype(*mtk::_declval<InputIter>())>* = nullptr
+		,_void_t<decltype(*(mtk::_declval<InputIter&>()++))>* = nullptr
 #endif
 	>
 	array(InputIter first, InputIter last) :
