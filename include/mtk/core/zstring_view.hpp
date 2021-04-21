@@ -67,12 +67,12 @@ public:
 		,_void_t<typename StdString::allocator_type>* = nullptr
 		,_require<std::is_constructible_v<StdString, const char*>> = 0
 		,_require<std::is_same_v<decltype(mtk::_declval<StdString&>().c_str()), const char*>> = 0
-		,void_t<decltype(mtk::_declval<StdString&>().length())>* = nullptr
-		,void_t<decltype(mtk::_declval<StdString&>().replace(size_t(), size_t(), mtk::_declval<StdString&>()))>* = nullptr
-		,void_t<decltype(mtk::_declval<StdString&>().find_first_not_of(mtk::_declval<StdString&>()))>* = nullptr
-		,void_t<decltype(StdString::npos)>* = nullptr
-		,void_t<decltype(mtk::_declval<StdString&>() += mtk::_declval<StdString&>())>* = nullptr
-		,void_t<decltype(mtk::_declval<StdString&>() += "")>* = nullptr
+		,_void_t<decltype(mtk::_declval<StdString&>().length())>* = nullptr
+		,_void_t<decltype(mtk::_declval<StdString&>().replace(size_t(), size_t(), mtk::_declval<StdString&>()))>* = nullptr
+		,_void_t<decltype(mtk::_declval<StdString&>().find_first_not_of(mtk::_declval<StdString&>()))>* = nullptr
+		,_void_t<decltype(StdString::npos)>* = nullptr
+		,_void_t<decltype(mtk::_declval<StdString&>() += mtk::_declval<StdString&>())>* = nullptr
+		,_void_t<decltype(mtk::_declval<StdString&>() += "")>* = nullptr
 #endif
 	>
 	zstring_view(const StdString& s) :
