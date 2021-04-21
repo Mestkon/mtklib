@@ -14,6 +14,7 @@
 #include <mtk/core/overload.hpp>
 #include <mtk/core/pointer.hpp>
 #include <mtk/core/preprocessor.hpp>
+#include <mtk/core/reverse_iterators.hpp>
 #include <mtk/core/saturate_cast.hpp>
 #include <mtk/core/scope_exit.hpp>
 #include <mtk/core/span.hpp>
