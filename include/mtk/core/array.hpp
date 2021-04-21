@@ -24,20 +24,22 @@ struct _is_subtractable<T
 		,_void_t<decltype(mtk::_declval<T>() - mtk::_declval<T>())>
 	> : std::true_type { };
 
-template<class Iter>
+template<class Iter
+	,class Iter2>
 constexpr
 void
-_copy_range(Iter first, Iter last, Iter dst)
+_copy_range(Iter first, Iter last, Iter2 dst)
 {
 	while (first != last) {
 		*(dst++) = *(first++);
 	}
 }
 
-template<class Iter>
+template<class Iter
+	,class Iter2>
 constexpr
 void
-_move_range(Iter first, Iter last, Iter dst)
+_move_range(Iter first, Iter last, Iter2 dst)
 {
 	while (first != last) {
 		*(dst++) = mtk::_move(*(first++));
@@ -467,10 +469,8 @@ private:
 		auto it = tmp.begin();
 		while (first != last) {
 			if (it == tmp.end()) {
-				array tmp2(tmp.size()*2);
-				impl_array::_move_range(tmp.begin(), tmp.end(), tmp2.begin());
-				tmp.swap(tmp2);
-				it = tmp.begin() + tmp2.size();
+				tmp.resize(tmp.size()*2);
+				it = tmp.begin() + count;
 			}
 
 			++count;
@@ -488,10 +488,7 @@ private:
 	{
 		MTK_ASSERT((last - first) >= 0);
 		array tmp(last - first);
-		auto it = tmp.begin();
-		while (first != last) {
-			*(it++) = *(first++);
-		}
+		impl_array::_copy_range(first, last, tmp.begin());
 		this->swap(tmp);
 	}
 
