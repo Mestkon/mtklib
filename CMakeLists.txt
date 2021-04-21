@@ -19,6 +19,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/assert.hpp
     include/mtk/core/byte_cast.hpp
     include/mtk/core/flag_operators.hpp
+    include/mtk/core/iterator_traits.hpp
     include/mtk/core/math.hpp
     include/mtk/core/mem_cast.hpp
     include/mtk/core/narrow_cast.hpp
