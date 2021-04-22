@@ -54,4 +54,5 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/ranges.hpp
     include/mtk/ranges/range.hpp
+    include/mtk/ranges/zip.hpp
 )
