@@ -8,10 +8,10 @@
 #include <mtk/core/impl/declval.hpp>
 #include <mtk/core/impl/move.hpp>
 #include <mtk/core/impl/require.hpp>
+#include <mtk/ranges/impl/functor_storage.hpp>
 
 #include <iterator>
 #include <optional>
-#include <memory>
 #include <type_traits>
 
 namespace mtk {
@@ -32,7 +32,7 @@ public:
 	using iterator_category = std::input_iterator_tag;
 
 	_generator_iterator() :
-		m_func(nullptr),
+		m_func(),
 		m_value(std::nullopt)
 	{ }
 
@@ -40,14 +40,14 @@ public:
 		,_require<std::is_constructible_v<Func, F>> = 0
 	>
 	_generator_iterator(F&& f) :
-		m_func(std::make_shared<Func>(mtk::_forward<F>(f))),
+		m_func(mtk::_forward<F>(f)),
 		m_value(std::nullopt)
 	{
 		++*this;
 	}
 
 	_generator_iterator(value_type val) :
-		m_func(nullptr),
+		m_func(),
 		m_value(mtk::_move(val))
 	{ }
 
@@ -68,8 +68,7 @@ public:
 	_generator_iterator&
 	operator++(_generator_iterator& rhs)
 	{
-		MTK_ASSERT(rhs.m_func != nullptr);
-		rhs.m_value = (*rhs.m_func)();
+		rhs.m_value = rhs.m_func.get()();
 		return rhs;
 	}
 
@@ -98,7 +97,7 @@ public:
 	}
 
 private:
-	std::shared_ptr<Func> m_func;
+	_functor_storage<Func> m_func;
 	std::optional<value_type> m_value;
 };
 
@@ -106,7 +105,11 @@ private:
 
 
 
-template<class Func>
+template<class Func
+#ifndef MTK_DOXYGEN
+	,_require<std::is_invocable_v<std::decay_t<Func>>> = 0
+#endif
+>
 auto
 generate(Func&& f)
 {
