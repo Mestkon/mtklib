@@ -200,11 +200,12 @@ template<class Cont
 auto
 filter(Cont&& cont, Predicate&& p)
 {
-	using iterator = typename std::decay_t<Cont>::iterator;
-	using filter_iter = impl_filter::_filter_iterator<iterator, std::decay_t<Predicate>>;
-
 	using std::begin;
 	using std::end;
+
+	using iterator = decltype(begin(cont));
+	using filter_iter = impl_filter::_filter_iterator<iterator, std::decay_t<Predicate>>;
+
 	filter_iter first(begin(cont), end(cont), mtk::_forward<Predicate>(p));
 	filter_iter last(end(cont), end(cont));
 	return mtk::range(first, last);
