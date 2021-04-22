@@ -4,6 +4,7 @@
 #include <mtk/core/assert.hpp>
 #include <mtk/core/iterator_traits.hpp>
 #include <mtk/ranges/range.hpp>
+#include <mtk/core/impl/require.hpp>
 
 #include <iterator>
 #include <type_traits>
@@ -86,7 +87,11 @@ private:
 
 
 
-template<class Cont>
+template<class Cont
+#ifndef MTK_DOXYGEN
+	,_require<is_input_iterator_v<typename std::decay_t<Cont>::iterator>> = 0
+#endif
+>
 constexpr
 auto
 take(Cont&& c, typename std::decay_t<Cont>::size_type to_take)
