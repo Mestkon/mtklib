@@ -15,11 +15,11 @@ namespace mtk {
 namespace impl_transform {
 
 template<class Iter
-	,class Predicate>
+	,class Functor>
 class _transform_iterator
 {
 public:
-	using value_type = decltype(mtk::_declval<Predicate&>()(*mtk::_declval<Iter>()));
+	using value_type = decltype(mtk::_declval<Functor&>()(*mtk::_declval<Iter>()));
 	using reference = value_type;
 	using pointer = struct {
 		value_type value;
@@ -29,21 +29,21 @@ public:
 	using difference_type = iter::difference_type<Iter>;
 	using iterator_category = std::input_iterator_tag;
 
-	template<class P>
-	_transform_iterator(Iter iter, P&& p) :
+	template<class F>
+	_transform_iterator(Iter iter, F&& f) :
 		m_iter(iter),
-		m_pred(mtk::_forward<P>(p))
+		m_func(mtk::_forward<F>(f))
 	{ }
 
 	_transform_iterator(Iter iter) :
 		m_iter(iter),
-		m_pred()
+		m_func()
 	{ }
 
 	reference
 	operator*() const
 	{
-		return m_pred.get()(*m_iter);
+		return m_func.get()(*m_iter);
 	}
 
 	pointer
@@ -85,7 +85,7 @@ public:
 
 private:
 	Iter m_iter;
-	_functor_storage<Predicate> m_pred;
+	_functor_storage<Functor> m_func;
 };
 
 } // namespace impl_transform
@@ -93,21 +93,21 @@ private:
 
 
 template<class Cont
-	,class Predicate
+	,class Functor
 #ifndef MTK_DOXYGEN
 	,_require<is_input_iterator_v<typename std::decay_t<Cont>::iterator>> = 0
-	,_require<std::is_invocable_v<std::decay_t<Predicate>, typename std::decay_t<Cont>::reference>> = 0
+	,_require<std::is_invocable_v<std::decay_t<Functor>, typename std::decay_t<Cont>::reference>> = 0
 #endif
 >
 auto
-transform(Cont&& cont, Predicate&& p)
+transform(Cont&& cont, Functor&& f)
 {
 	using iterator = typename std::decay_t<Cont>::const_iterator;
-	using transfom_iter = impl_transform::_transform_iterator<iterator, std::decay_t<Predicate>>;
+	using transfom_iter = impl_transform::_transform_iterator<iterator, std::decay_t<Functor>>;
 
 	using std::begin;
 	using std::end;
-	transfom_iter first(begin(cont), mtk::_forward<Predicate>(p));
+	transfom_iter first(begin(cont), mtk::_forward<Functor>(f));
 	transfom_iter last(end(cont));
 	return mtk::range(first, last);
 }
@@ -116,43 +116,43 @@ transform(Cont&& cont, Predicate&& p)
 
 namespace impl_transform {
 
-template<class Predicate>
+template<class Functor>
 struct _transfom_builder
 {
-	Predicate pred;
+	Functor func;
 };
 
 template<class Cont
-	,class Pred
+	,class Func
 	,_require<is_input_iterator_v<typename std::decay_t<Cont>::iterator>> = 0
-	,_require<std::is_invocable_r_v<bool, std::decay_t<Pred>, typename std::decay_t<Cont>::reference>> = 0
+	,_require<std::is_invocable_r_v<bool, std::decay_t<Func>, typename std::decay_t<Cont>::reference>> = 0
 >
 auto
-operator|(Cont&& cont, const _transfom_builder<Pred>& pred)
+operator|(Cont&& cont, const _transfom_builder<Func>& func)
 {
-	return mtk::transform(mtk::_forward<Cont>(cont), pred.pred);
+	return mtk::transform(mtk::_forward<Cont>(cont), func.func);
 }
 
 template<class Cont
-	,class Pred
+	,class Func
 	,_require<is_input_iterator_v<typename std::decay_t<Cont>::iterator>> = 0
-	,_require<std::is_invocable_r_v<bool, std::decay_t<Pred>, typename std::decay_t<Cont>::reference>> = 0
+	,_require<std::is_invocable_r_v<bool, std::decay_t<Func>, typename std::decay_t<Cont>::reference>> = 0
 >
 auto
-operator|(Cont&& cont, _transfom_builder<Pred>&& pred)
+operator|(Cont&& cont, _transfom_builder<Func>&& func)
 {
-	return mtk::transform(mtk::_forward<Cont>(cont), mtk::_move(pred.pred));
+	return mtk::transform(mtk::_forward<Cont>(cont), mtk::_move(func.func));
 }
 
 } // namespace impl_transform
 
 
 
-template<class Pred>
+template<class Func>
 auto
-transform(Pred&& p)
+transform(Func&& f)
 {
-	return impl_transform::_transfom_builder<std::decay_t<Pred>>{mtk::_forward<Pred>(p)};
+	return impl_transform::_transfom_builder<std::decay_t<Func>>{mtk::_forward<Func>(f)};
 }
 
 } // namespace mtk
