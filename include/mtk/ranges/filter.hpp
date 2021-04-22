@@ -6,9 +6,9 @@
 #include <mtk/core/impl/addressof.hpp>
 #include <mtk/core/impl/move.hpp>
 #include <mtk/core/impl/require.hpp>
+#include <mtk/ranges/impl/predicate_storage.hpp>
 
 #include <iterator>
-#include <memory>
 #include <optional>
 #include <type_traits>
 
@@ -87,51 +87,6 @@ struct _filter_iter_storage<Iter, false>
 	Iter iter;
 	Iter end;
 	std::optional<iter::value_type<Iter>> val;
-};
-
-template<class Pred
-	,bool C = std::is_copy_constructible_v<Pred> && std::is_copy_assignable_v<Pred>>
-struct _filter_pred_storage
-{
-	_filter_pred_storage() :
-		pred(std::nullopt)
-	{ }
-
-	template<class P>
-	_filter_pred_storage(P&& p) :
-		pred(mtk::_forward<P>(p))
-	{ }
-
-	Pred&
-	get()
-	{
-		MTK_ASSERT(this->pred.has_value());
-		return *this->pred;
-	}
-
-	std::optional<Pred> pred;
-};
-
-template<class Pred>
-struct _filter_pred_storage<Pred, false>
-{
-	_filter_pred_storage() :
-		pred(nullptr)
-	 { }
-
-	template<class P>
-	_filter_pred_storage(P&& p) :
-		pred(std::make_shared<Pred>(mtk::_forward<P>(p)))
-	{ }
-
-	Pred&
-	get()
-	{
-		MTK_ASSERT(this->pred != nullptr);
-		return *this->pred;
-	}
-
-	std::shared_ptr<Pred> pred;
 };
 
 template<class Iter
@@ -228,7 +183,7 @@ public:
 
 private:
 	_filter_iter_storage<Iter> m_storage;
-	_filter_pred_storage<Predicate> m_pred;
+	_predicate_storage<Predicate> m_pred;
 };
 
 } // namespace impl_filter
