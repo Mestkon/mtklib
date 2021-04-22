@@ -50,3 +50,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     src/mtk/core/scope_exit.cpp
     src/mtk/core/zstring_view.cpp
 )
+
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+    include/mtk/ranges.hpp
+    include/mtk/ranges/range.hpp
+)
