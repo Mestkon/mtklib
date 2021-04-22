@@ -3,7 +3,9 @@
 
 #include <mtk/core/assert.hpp>
 #include <mtk/core/iterator_traits.hpp>
+#include <mtk/core/types.hpp>
 #include <mtk/ranges/range.hpp>
+#include <mtk/core/impl/move.hpp>
 #include <mtk/core/impl/require.hpp>
 
 #include <iterator>
@@ -101,6 +103,35 @@ take(Cont&& c, typename std::decay_t<Cont>::size_type to_take)
 	impl_take::_take_iterator first(begin(c), to_take, 0);
 	impl_take::_take_iterator last(end(c), to_take, to_take);
 	return mtk::range(first, last);
+}
+
+
+
+namespace impl_take {
+
+struct _take_builder
+{
+	size_t to_take;
+};
+
+template<class Cont
+	,_require<is_input_iterator_v<typename std::decay_t<Cont>::iterator>> = 0
+>
+auto
+operator|(Cont&& cont, _take_builder take)
+{
+	return mtk::take(mtk::_forward<Cont>(cont), take.to_take);
+}
+
+} // namespace impl_take
+
+
+
+constexpr
+auto
+take(size_t to_take)
+{
+	return impl_take::_take_builder{to_take};
 }
 
 } // namespace mtk

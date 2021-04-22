@@ -255,6 +255,49 @@ filter(Cont&& cont, Predicate&& p)
 	return mtk::range(first, last);
 }
 
+
+
+namespace impl_filter {
+
+template<class Predicate>
+struct _filter_builder
+{
+	Predicate pred;
+};
+
+template<class Cont
+	,class Pred
+	,_require<is_input_iterator_v<typename std::decay_t<Cont>::iterator>> = 0
+	,_require<std::is_invocable_r_v<bool, std::decay_t<Pred>, typename std::decay_t<Cont>::reference>> = 0
+>
+auto
+operator|(Cont&& cont, const _filter_builder<Pred>& pred)
+{
+	return mtk::filter(mtk::_forward<Cont>(cont), pred.pred);
+}
+
+template<class Cont
+	,class Pred
+	,_require<is_input_iterator_v<typename std::decay_t<Cont>::iterator>> = 0
+	,_require<std::is_invocable_r_v<bool, std::decay_t<Pred>, typename std::decay_t<Cont>::reference>> = 0
+>
+auto
+operator|(Cont&& cont, _filter_builder<Pred>&& pred)
+{
+	return mtk::filter(mtk::_forward<Cont>(cont), mtk::_move(pred.pred));
+}
+
+} // namespace impl_filter
+
+
+
+template<class Pred>
+auto
+filter(Pred&& p)
+{
+	return impl_filter::_filter_builder<std::decay_t<Pred>>{mtk::_forward<Pred>(p)};
+}
+
 } // namespace mtk
 
 #endif
