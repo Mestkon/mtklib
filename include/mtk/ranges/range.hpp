@@ -7,6 +7,7 @@
 #include <mtk/core/reverse_iterators.hpp>
 #include <mtk/core/impl/require.hpp>
 
+#include <limits>
 #include <iterator>
 #include <type_traits>
 
@@ -283,6 +284,12 @@ range(T begin, T end, StepT step) noexcept
 	impl_range::_range_iterator last(end, step);
 	return mtk::range(first, last);
 }
+
+
+
+inline constexpr
+auto
+integers = mtk::range(std::numeric_limits<ullong>::max());
 
 } // namespace mtk
 
