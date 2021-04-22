@@ -24,13 +24,13 @@ struct _predicate_storage
 	{ }
 
 	Pred&
-	get()
+	get() const
 	{
 		MTK_ASSERT(this->pred.has_value());
 		return *this->pred;
 	}
 
-	std::optional<Pred> pred;
+	mutable std::optional<Pred> pred;
 };
 
 template<class Pred>
@@ -46,7 +46,7 @@ struct _predicate_storage<Pred, false>
 	{ }
 
 	Pred&
-	get()
+	get() const
 	{
 		MTK_ASSERT(this->pred != nullptr);
 		return *this->pred;
