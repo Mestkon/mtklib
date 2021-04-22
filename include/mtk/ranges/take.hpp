@@ -67,14 +67,14 @@ public:
 	bool
 	operator==(const _take_iterator& lhs, const _take_iterator& rhs)
 	{
-		return (lhs.m_idx == rhs.m_idx);
+		return (lhs.m_idx == rhs.m_idx) || (lhs.m_iter == rhs.m_iter);
 	}
 
 	friend constexpr
 	bool
 	operator!=(const _take_iterator& lhs, const _take_iterator& rhs)
 	{
-		return (lhs.m_idx != rhs.m_idx);
+		return !(lhs == rhs);
 	}
 
 private:
@@ -97,8 +97,9 @@ auto
 take(Cont&& c, typename std::decay_t<Cont>::size_type to_take)
 {
 	using std::begin;
+	using std::end;
 	impl_take::_take_iterator first(begin(c), to_take, 0);
-	impl_take::_take_iterator last(begin(c), to_take, to_take);
+	impl_take::_take_iterator last(end(c), to_take, to_take);
 	return mtk::range(first, last);
 }
 
