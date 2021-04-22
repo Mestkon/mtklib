@@ -60,5 +60,5 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/ranges/take.hpp
     include/mtk/ranges/transform.hpp
     include/mtk/ranges/zip.hpp
-    include/mtk/ranges/impl/predicate_storage.hpp
+    include/mtk/ranges/impl/functor_storage.hpp
 )

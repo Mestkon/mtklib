@@ -6,7 +6,7 @@
 #include <mtk/core/impl/addressof.hpp>
 #include <mtk/core/impl/declval.hpp>
 #include <mtk/core/impl/move.hpp>
-#include <mtk/ranges/impl/predicate_storage.hpp>
+#include <mtk/ranges/impl/functor_storage.hpp>
 
 #include <iterator>
 #include <type_traits>
@@ -85,7 +85,7 @@ public:
 
 private:
 	Iter m_iter;
-	_predicate_storage<Predicate> m_pred;
+	_functor_storage<Predicate> m_pred;
 };
 
 } // namespace impl_transform

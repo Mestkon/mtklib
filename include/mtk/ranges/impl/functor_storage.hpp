@@ -1,5 +1,5 @@
-#ifndef MTK_RANGES_IMPL_PREDICATE_STORAGE_HPP
-#define MTK_RANGES_IMPL_PREDICATE_STORAGE_HPP
+#ifndef MTK_RANGES_IMPL_FUNCTOR_STORAGE_HPP
+#define MTK_RANGES_IMPL_FUNCTOR_STORAGE_HPP
 
 #include <mtk/core/assert.hpp>
 #include <mtk/core/impl/move.hpp>
@@ -12,14 +12,14 @@ namespace mtk {
 
 template<class Pred
 	,bool C = std::is_copy_constructible_v<Pred> && std::is_copy_assignable_v<Pred>>
-struct _predicate_storage
+struct _functor_storage
 {
-	_predicate_storage() :
+	_functor_storage() :
 		pred(std::nullopt)
 	{ }
 
 	template<class P>
-	_predicate_storage(P&& p) :
+	_functor_storage(P&& p) :
 		pred(mtk::_forward<P>(p))
 	{ }
 
@@ -34,14 +34,14 @@ struct _predicate_storage
 };
 
 template<class Pred>
-struct _predicate_storage<Pred, false>
+struct _functor_storage<Pred, false>
 {
-	_predicate_storage() :
+	_functor_storage() :
 		pred(nullptr)
 	 { }
 
 	template<class P>
-	_predicate_storage(P&& p) :
+	_functor_storage(P&& p) :
 		pred(std::make_shared<Pred>(mtk::_forward<P>(p)))
 	{ }
 

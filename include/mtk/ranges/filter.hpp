@@ -6,7 +6,7 @@
 #include <mtk/core/impl/addressof.hpp>
 #include <mtk/core/impl/move.hpp>
 #include <mtk/core/impl/require.hpp>
-#include <mtk/ranges/impl/predicate_storage.hpp>
+#include <mtk/ranges/impl/functor_storage.hpp>
 
 #include <iterator>
 #include <optional>
@@ -183,7 +183,7 @@ public:
 
 private:
 	_filter_iter_storage<Iter> m_storage;
-	_predicate_storage<Predicate> m_pred;
+	_functor_storage<Predicate> m_pred;
 };
 
 } // namespace impl_filter
