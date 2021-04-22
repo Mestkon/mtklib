@@ -10,49 +10,49 @@
 
 namespace mtk {
 
-template<class Pred
-	,bool C = std::is_copy_constructible_v<Pred> && std::is_copy_assignable_v<Pred>>
+template<class Func
+	,bool C = std::is_copy_constructible_v<Func> && std::is_copy_assignable_v<Func>>
 struct _functor_storage
 {
 	_functor_storage() :
-		pred(std::nullopt)
+		func(std::nullopt)
 	{ }
 
-	template<class P>
-	_functor_storage(P&& p) :
-		pred(mtk::_forward<P>(p))
+	template<class F>
+	_functor_storage(F&& f) :
+		func(mtk::_forward<F>(f))
 	{ }
 
-	Pred&
+	Func&
 	get() const
 	{
-		MTK_ASSERT(this->pred.has_value());
-		return *this->pred;
+		MTK_ASSERT(this->func.has_value());
+		return *this->func;
 	}
 
-	mutable std::optional<Pred> pred;
+	mutable std::optional<Func> func;
 };
 
-template<class Pred>
-struct _functor_storage<Pred, false>
+template<class Func>
+struct _functor_storage<Func, false>
 {
 	_functor_storage() :
-		pred(nullptr)
+		func(nullptr)
 	 { }
 
-	template<class P>
-	_functor_storage(P&& p) :
-		pred(std::make_shared<Pred>(mtk::_forward<P>(p)))
+	template<class F>
+	_functor_storage(F&& f) :
+		func(std::make_shared<Func>(mtk::_forward<F>(f)))
 	{ }
 
-	Pred&
+	Func&
 	get() const
 	{
-		MTK_ASSERT(this->pred != nullptr);
-		return *this->pred;
+		MTK_ASSERT(this->func != nullptr);
+		return *this->func;
 	}
 
-	std::shared_ptr<Pred> pred;
+	std::shared_ptr<Func> func;
 };
 
 } // namespace mtk
