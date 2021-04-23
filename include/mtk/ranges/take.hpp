@@ -117,6 +117,7 @@ struct _take_builder
 template<class Cont
 	,_require<is_input_iterator_v<typename std::decay_t<Cont>::iterator>> = 0
 >
+constexpr
 auto
 operator|(Cont&& cont, _take_builder take)
 {
