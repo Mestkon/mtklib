@@ -128,7 +128,7 @@ operator|(Cont&& cont, _take_builder take)
 
 
 
-constexpr
+inline constexpr
 auto
 take(size_t to_take)
 {
