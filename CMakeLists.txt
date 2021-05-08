@@ -9,6 +9,8 @@ add_library(${CMAKE_PROJECT_NAME} STATIC "")
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE include)
 
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic")
+
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     add_definitions(-DMTK_DEBUG)
 endif()
@@ -44,6 +46,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/impl/require.hpp
     include/mtk/core/impl/swap.hpp
 
+    src/mtk/core.cpp
     src/mtk/core/assert.cpp
     src/mtk/core/narrow_cast.cpp
     src/mtk/core/nullptr_exception.cpp
@@ -62,4 +65,6 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/ranges/transform.hpp
     include/mtk/ranges/zip.hpp
     include/mtk/ranges/impl/functor_storage.hpp
+
+    src/mtk/ranges.cpp
 )
