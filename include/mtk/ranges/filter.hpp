@@ -16,144 +16,62 @@ namespace mtk {
 namespace impl_filter {
 
 template<class Iter
-	,class Pred>
-decltype(auto)
-_increment(Iter& iter, Iter& end, Pred& p)
-{
-	while (++iter != end) {
-		decltype(auto) value = *iter;
-		if (p(value))
-			return value;
-	}
-}
-
-template<class Iter
-	,bool FwdIter = is_forward_iterator_v<Iter>>
-struct _filter_iter_storage
-{
-	_filter_iter_storage(Iter iter, Iter end) :
-		iter(iter),
-		end(end)
-	{ }
-
-	template<class T>
-	_filter_iter_storage(Iter iter, Iter end, T&&) :
-		_filter_iter_storage(iter, end)
-	{ }
-
-	decltype(auto)
-	value() const
-	{
-		return *this->iter;
-	}
-
-	template<class T>
-	void
-	value(T&&)
-	{ }
-
-	Iter iter;
-	Iter end;
-};
-
-template<class Iter>
-struct _filter_iter_storage<Iter, false>
-{
-	_filter_iter_storage(Iter iter, Iter end) :
-		iter(iter),
-		end(end),
-		val(std::nullopt)
-	{ }
-
-	_filter_iter_storage(Iter iter, Iter end, iter::value_type<Iter> value) :
-		iter(iter),
-		end(end),
-		val(mtk::_move(value))
-	{ }
-
-	decltype(auto)
-	value() const
-	{
-		MTK_ASSERT(this->val.has_value());
-		return *this->val;
-	}
-
-	void
-	value(iter::value_type<Iter> value)
-	{
-		this->val = mtk::_move(value);
-	}
-
-	Iter iter;
-	Iter end;
-	std::optional<iter::value_type<Iter>> val;
-};
-
-template<class Iter
 	,class Predicate>
 class _filter_iterator
 {
 public:
 	using value_type = iter::value_type<Iter>;
-	using reference = std::conditional_t<is_forward_iterator_v<Iter>, iter::reference<Iter>, value_type>;
-	using pointer = struct {
-		reference value;
-		auto
-		operator->() const
-		{
-			return mtk::_addressof(this->value);
-		}
-	};
+	using reference = iter::reference<Iter>;
+	using pointer = iter::pointer<Iter>;
 	using difference_type = iter::difference_type<Iter>;
 	using iterator_category = std::input_iterator_tag;
 
 	template<class P
 		,_require<std::is_constructible_v<Predicate, P>> = 0>
 	_filter_iterator(Iter iter, Iter end, P&& p) :
-		m_storage(iter, end),
-		m_pred(mtk::_forward<P>(p))
+		m_pred(mtk::_forward<P>(p)),
+		m_iter(iter),
+		m_end(end)
 	{
-		if (m_storage.iter == m_storage.end)
+		if (m_iter == m_end)
 			return;
 
-		decltype(auto) value = *m_storage.iter;
-		if (!m_pred.get()(value))
+		if (!m_pred.get()(*m_iter))
 			++*this;
-		else
-			m_storage.value(mtk::_move(value));
 	}
 
-	template<class T
-		,_require<std::is_convertible_v<T, value_type>> = 0>
-	_filter_iterator(Iter iter, Iter end, T&& t) :
-		m_storage(iter, end, mtk::_forward(t)),
-		m_pred()
-	{ }
-
 	_filter_iterator(Iter iter, Iter end) :
-		m_storage(iter, end),
-		m_pred()
+		m_pred(),
+		m_iter(iter),
+		m_end(end)
 	{ }
 
 	reference
 	operator*() const
 	{
-		MTK_ASSERT(m_storage.iter != m_storage.end);
-		return m_storage.value();
+		MTK_ASSERT(m_iter != m_end);
+		return *m_iter;
 	}
 
 	pointer
 	operator->() const
 	{
-		return pointer{**this};
+		MTK_ASSERT(m_iter != m_end);
+		if constexpr (std::is_class_v<Iter>)
+			return m_iter.operator->();
+		else
+			return m_iter;
 	}
 
 	friend
 	_filter_iterator&
 	operator++(_filter_iterator& rhs)
 	{
-		MTK_ASSERT(rhs.m_storage.iter != rhs.m_storage.end);
-		rhs.m_storage.value(impl_filter::_increment(rhs.m_storage.iter, rhs.m_storage.end, rhs.m_pred.get()));
+		MTK_ASSERT(rhs.m_iter != rhs.m_end);
+		while (++rhs.m_iter != rhs.m_end) {
+			if (rhs.m_pred.get()(*rhs.m_iter))
+				break;
+		}
 		return rhs;
 	}
 
@@ -161,7 +79,7 @@ public:
 	_filter_iterator
 	operator++(_filter_iterator& lhs, int)
 	{
-		_filter_iterator cp(lhs.m_storage.iter, lhs.m_storage.end, lhs.m_storage.value());
+		_filter_iterator cp(lhs.m_iter, lhs.m_end);
 		++lhs;
 		return cp;
 	}
@@ -170,20 +88,21 @@ public:
 	bool
 	operator==(const _filter_iterator& lhs, const _filter_iterator& rhs)
 	{
-		return (lhs.m_storage.iter == rhs.m_storage.iter);
+		return (lhs.m_iter == rhs.m_iter);
 	}
 
 	friend
 	bool
 	operator!=(const _filter_iterator& lhs, const _filter_iterator& rhs)
 	{
-		return (lhs.m_storage.iter != rhs.m_storage.iter);
+		return (lhs.m_iter != rhs.m_iter);
 	}
 
 
 private:
-	_filter_iter_storage<Iter> m_storage;
 	_functor_storage<Predicate> m_pred;
+	Iter m_iter;
+	Iter m_end;
 };
 
 } // namespace impl_filter
