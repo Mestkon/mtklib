@@ -5,6 +5,7 @@
 #include <mtk/core/types.hpp>
 #include <mtk/core/iterator_traits.hpp>
 #include <mtk/core/reverse_iterators.hpp>
+#include <mtk/core/impl/move.hpp>
 #include <mtk/core/impl/require.hpp>
 
 #include <limits>
@@ -223,6 +224,33 @@ reversed(Cont&& c)
 	using std::rbegin;
 	using std::rend;
 	return range(rbegin(c), rend(c));
+}
+
+
+
+namespace impl_range {
+
+struct _reversed_builder { };
+
+template<class Cont
+	,_require<is_bidirectional_iterator_v<typename std::decay_t<Cont>::iterator>> = 0
+>
+constexpr
+auto
+operator|(Cont&& cont, _reversed_builder)
+{
+	return mtk::reversed(mtk::_forward<Cont>(cont));
+}
+
+} // namespace impl_range
+
+
+
+inline constexpr
+auto
+reversed()
+{
+	return impl_range::_reversed_builder();
 }
 
 
