@@ -40,10 +40,13 @@ public:
 	}
 
 	constexpr
-	Iter
+	pointer
 	operator->() const
 	{
-		return m_iter;
+		if constexpr (std::is_class_v<Iter>)
+			return m_iter.operator->();
+		else
+			return m_iter;
 	}
 
 	friend constexpr
