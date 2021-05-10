@@ -8,6 +8,7 @@
 #include <mtk/core/impl/require.hpp>
 
 #include <iterator>
+#include <limits>
 #include <tuple>
 #include <type_traits>
 #include <utility>
@@ -90,14 +91,14 @@ public:
 	bool
 	operator==(const _zip_iterator& lhs, const _zip_iterator& rhs)
 	{
-		return (std::get<0>(lhs.m_iters) == std::get<0>(rhs.m_iters));
+		return (std::get<sizeof...(Iters) - 1>(lhs.m_iters) == std::get<sizeof...(Iters) - 1>(rhs.m_iters));
 	}
 
 	friend constexpr
 	bool
 	operator!=(const _zip_iterator& lhs, const _zip_iterator& rhs)
 	{
-		return (std::get<0>(lhs.m_iters) != std::get<0>(rhs.m_iters));
+		return (std::get<sizeof...(Iters) - 1>(lhs.m_iters) != std::get<sizeof...(Iters) - 1>(rhs.m_iters));
 	}
 
 private:
@@ -134,8 +135,8 @@ constexpr
 auto
 enumerate(Cont&& c)
 {
-	using std::size;
-	return mtk::zip(mtk::range(size(c)), c);
+	using size_type = typename std::decay_t<Cont>::size_type;
+	return mtk::zip(mtk::range(std::numeric_limits<size_type>::max()), c);
 }
 
 
