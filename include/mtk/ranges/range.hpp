@@ -317,7 +317,7 @@ range(T begin, T end, StepT step) noexcept
 
 inline constexpr
 auto
-integers = mtk::range(std::numeric_limits<ullong>::max());
+natural_numbers = mtk::range(std::numeric_limits<ullong>::max());
 
 } // namespace mtk
 
