@@ -41,6 +41,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/impl/addressof.hpp
     include/mtk/core/impl/clamp.hpp
     include/mtk/core/impl/declval.hpp
+    include/mtk/core/impl/dynamic_extent.hpp
     include/mtk/core/impl/move.hpp
     include/mtk/core/impl/pointer_validator.hpp
     include/mtk/core/impl/require.hpp
@@ -68,3 +69,13 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 
     src/mtk/ranges.cpp
 )
+
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+    include/mtk/linalg.hpp
+    include/mtk/linalg/fwd.hpp
+    include/mtk/linalg/matrix.hpp
+
+    src/mtk/linalg.cpp
+)
+
+

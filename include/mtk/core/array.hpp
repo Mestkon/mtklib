@@ -5,6 +5,7 @@
 #include <mtk/core/types.hpp>
 #include <mtk/core/unique_ptr.hpp>
 #include <mtk/core/impl/declval.hpp>
+#include <mtk/core/impl/dynamic_extent.hpp>
 #include <mtk/core/impl/require.hpp>
 #include <mtk/core/impl/swap.hpp>
 
@@ -89,9 +90,7 @@ _less_than_range(Iter first1, Iter last1, Iter first2, Iter last2)
 
 } // namespace impl_array
 
-inline constexpr
-size_t
-dynamic_extent = static_cast<size_t>(-1);
+
 
 template<class T
 	,size_t N = dynamic_extent>
