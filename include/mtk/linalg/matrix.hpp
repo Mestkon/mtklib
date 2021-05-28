@@ -2271,6 +2271,7 @@ public:
 		m_cols(0)
 	{ }
 
+	explicit
 	matrix(size_t cols) :
 		m_data(R*cols),
 		m_cols(cols)
@@ -2330,6 +2331,7 @@ public:
 		m_rows(0)
 	{ }
 
+	explicit
 	matrix(size_t rows) :
 		m_data(rows*C),
 		m_rows(rows)
@@ -2389,6 +2391,7 @@ public:
 		m_cols(0)
 	{ }
 
+	explicit
 	matrix(size_t rows, size_t cols) :
 		m_data(rows*cols),
 		m_rows(rows),
