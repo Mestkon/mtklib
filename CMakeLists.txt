@@ -16,6 +16,10 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
 endif()
 
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+    include/mtk.hpp
+)
+
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core.hpp
     include/mtk/core/array.hpp
     include/mtk/core/assert.hpp
