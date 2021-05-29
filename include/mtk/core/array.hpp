@@ -88,6 +88,10 @@ _less_than_range(Iter first1, Iter last1, Iter first2, Iter last2)
 	return ((first1 == last1) && (first2 != last2));
 }
 
+[[noreturn]]
+void
+_throw_out_of_range_exception(size_t idx, size_t size);
+
 } // namespace impl_array
 
 
@@ -128,6 +132,26 @@ public:
 	operator[](size_type pos) const
 	{
 		MTK_ASSERT(pos < this->size());
+		return *(this->begin() + pos);
+	}
+
+	constexpr
+	reference
+	at(size_type pos)
+	{
+		if (pos >= this->size())
+			mtk::impl_array::_throw_out_of_range_exception(pos, this->size());
+
+		return *(this->begin() + pos);
+	}
+
+	constexpr
+	const_reference
+	at(size_type pos) const
+	{
+		if (pos >= this->size())
+			mtk::impl_array::_throw_out_of_range_exception(pos, this->size());
+
 		return *(this->begin() + pos);
 	}
 
@@ -331,6 +355,24 @@ public:
 	operator[](size_type pos) const
 	{
 		MTK_ASSERT(pos < this->size());
+		return *(this->begin() + pos);
+	}
+
+	reference
+	at(size_type pos)
+	{
+		if (pos >= this->size())
+			mtk::impl_array::_throw_out_of_range_exception(pos, this->size());
+
+		return *(this->begin() + pos);
+	}
+
+	const_reference
+	at(size_type pos) const
+	{
+		if (pos >= this->size())
+			mtk::impl_array::_throw_out_of_range_exception(pos, this->size());
+
 		return *(this->begin() + pos);
 	}
 

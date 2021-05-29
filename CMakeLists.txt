@@ -48,6 +48,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/impl/swap.hpp
 
     src/mtk/core.cpp
+    src/mtk/core/array.cpp
     src/mtk/core/assert.cpp
     src/mtk/core/narrow_cast.cpp
     src/mtk/core/nullptr_exception.cpp
