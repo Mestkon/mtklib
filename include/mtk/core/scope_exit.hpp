@@ -1,20 +1,13 @@
 #ifndef MTK_CORE_SCOPE_EXIT_HPP
 #define MTK_CORE_SCOPE_EXIT_HPP
 
+#include <mtk/core/impl/exception.hpp>
 #include <mtk/core/impl/move.hpp>
 #include <mtk/core/impl/require.hpp>
 
 #include <type_traits>
 
 namespace mtk {
-namespace impl_scope_exit {
-
-bool
-_uncaught_exceptions() noexcept;
-
-} // namespace impl_scope_exit
-
-
 
 template<class Func>
 class scope_exit
@@ -79,7 +72,7 @@ public:
 
 	~scope_success() noexcept
 	{
-		const bool has_ex = mtk::impl_scope_exit::_uncaught_exceptions();
+		const bool has_ex = mtk::_uncaught_exceptions();
 		if (m_active && !has_ex)
 			m_func();
 	}
@@ -123,7 +116,7 @@ public:
 
 	~scope_failure() noexcept
 	{
-		const bool has_ex = mtk::impl_scope_exit::_uncaught_exceptions();
+		const bool has_ex = mtk::_uncaught_exceptions();
 		if (m_active && has_ex)
 			m_func();
 	}

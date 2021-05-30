@@ -46,6 +46,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/impl/clamp.hpp
     include/mtk/core/impl/declval.hpp
     include/mtk/core/impl/dynamic_extent.hpp
+    include/mtk/core/impl/exception.hpp
     include/mtk/core/impl/move.hpp
     include/mtk/core/impl/pointer_validator.hpp
     include/mtk/core/impl/require.hpp
@@ -54,9 +55,9 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     src/mtk/core.cpp
     src/mtk/core/array.cpp
     src/mtk/core/assert.cpp
+    src/mtk/core/exception.cpp
     src/mtk/core/narrow_cast.cpp
     src/mtk/core/nullptr_exception.cpp
-    src/mtk/core/scope_exit.cpp
     src/mtk/core/zstring_view.cpp
 )
 
