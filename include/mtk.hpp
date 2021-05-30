@@ -1,7 +1,8 @@
 #ifndef MTK_HPP
 #define MTK_HPP
 
-//! @file Includes the entire library.
+//! @file
+//! Includes the entire library.
 
 //! @mainpage
 //!

@@ -1,7 +1,8 @@
 #ifndef MTK_CORE_BYTE_CAST_HPP
 #define MTK_CORE_BYTE_CAST_HPP
 
-//! @file Contains mtk::byte_cast
+//! @file
+//! Contains mtk::byte_cast
 
 #include <mtk/core/types.hpp>
 #include <mtk/core/impl/require.hpp>

@@ -1,7 +1,8 @@
 #ifndef MTK_CORE_FLAG_OPERATORS_HPP
 #define MTK_CORE_FLAG_OPERATORS_HPP
 
-//! @file Contains MTK_DEFINE_FLAG_OPERATORS
+//! @file
+//! Contains MTK_DEFINE_FLAG_OPERATORS
 
 #include <mtk/core/preprocessor.hpp>
 

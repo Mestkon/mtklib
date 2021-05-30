@@ -1,7 +1,8 @@
 #ifndef MTK_CORE_HPP
 #define MTK_CORE_HPP
 
-//! @file Includes the core module
+//! @file
+//! Includes the core module
 
 #include <mtk/core/array.hpp>
 #include <mtk/core/assert.hpp>

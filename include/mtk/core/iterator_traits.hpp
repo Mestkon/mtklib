@@ -1,7 +1,8 @@
 #ifndef MTK_CORE_ITERATOR_TRAITS_HPP
 #define MTK_CORE_ITERATOR_TRAITS_HPP
 
-//! @file Contains traits to check if a type satisfies
+//! @file
+//! Contains traits to check if a type satisfies
 //! the different iterator named requirements.
 
 #include <mtk/core/impl/declval.hpp>

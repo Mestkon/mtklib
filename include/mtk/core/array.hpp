@@ -1,7 +1,8 @@
 #ifndef MTK_CORE_ARRAY_HPP
 #define MTK_CORE_ARRAY_HPP
 
-//! @file Contains the definition of mtk::array.
+//! @file
+//! Contains the definition of mtk::array.
 
 #include <mtk/core/assert.hpp>
 #include <mtk/core/types.hpp>
@@ -637,6 +638,8 @@ private:
 	size_type m_size;
 };
 
+//! @}
+
 //! @brief Deduction guide.
 //!
 //! @relates array
@@ -743,8 +746,6 @@ operator>=(const array<T, N1>& lhs, const array<T, N2>& rhs)
 {
 	return !(lhs < rhs);
 }
-
-//! @}
 
 } // namespace mtk
 
