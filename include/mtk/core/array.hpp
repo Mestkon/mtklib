@@ -106,7 +106,7 @@ _throw_out_of_range_exception(size_t idx, size_t size);
 //! @brief Lightweight replacement for std::array.
 //!
 //! @code
-//! #include<mtk/core/array.hpp>
+//! #include <mtk/core/array.hpp>
 //! @endcode
 //!
 //! Lightweight as in includes less of the standard library.
@@ -336,7 +336,7 @@ public:
 //! @brief Specialization for dynamic_extent.
 //!
 //! @code
-//! #include<mtk/core/array.hpp>
+//! #include <mtk/core/array.hpp>
 //! @endcode
 template<class T>
 class array<T, dynamic_extent>
