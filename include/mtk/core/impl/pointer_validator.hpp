@@ -27,6 +27,14 @@ struct asserting_pointer_validator
 	}
 };
 
+struct empty_pointer_validator
+{
+	constexpr
+	void
+	operator()(const void*) const
+	{ }
+};
+
 } // namespace mtk
 
 #endif
