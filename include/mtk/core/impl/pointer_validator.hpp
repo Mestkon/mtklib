@@ -6,6 +6,17 @@
 
 namespace mtk {
 
+//! @addtogroup core
+//! @{
+
+//! @brief Use as pointer validator to throw nullptr_exception
+//! if a nullptr is dereferenced.
+//!
+//! @code
+//! #include <mtk/core/not_null.hpp>
+//! #include <mtk/core/pointer.hpp>
+//! #include <mtk/core/unique_ptr.hpp>
+//! @endcode
 struct default_pointer_validator
 {
 	constexpr
@@ -17,6 +28,14 @@ struct default_pointer_validator
 	}
 };
 
+//! @brief Use as pointer validator to assert that
+//! a nullptr is not dereferenced in debug mode.
+//!
+//! @code
+//! #include <mtk/core/not_null.hpp>
+//! #include <mtk/core/pointer.hpp>
+//! #include <mtk/core/unique_ptr.hpp>
+//! @endcode
 struct asserting_pointer_validator
 {
 	constexpr
@@ -27,6 +46,13 @@ struct asserting_pointer_validator
 	}
 };
 
+//! @brief Use as pointer validator to not validate anything.
+//!
+//! @code
+//! #include <mtk/core/not_null.hpp>
+//! #include <mtk/core/pointer.hpp>
+//! #include <mtk/core/unique_ptr.hpp>
+//! @endcode
 struct empty_pointer_validator
 {
 	constexpr
@@ -34,6 +60,8 @@ struct empty_pointer_validator
 	operator()(const void*) const
 	{ }
 };
+
+//! @}
 
 } // namespace mtk
 
