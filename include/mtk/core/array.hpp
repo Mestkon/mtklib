@@ -1,6 +1,8 @@
 #ifndef MTK_CORE_ARRAY_HPP
 #define MTK_CORE_ARRAY_HPP
 
+//! @file Contains the definition of mtk::array.
+
 #include <mtk/core/assert.hpp>
 #include <mtk/core/types.hpp>
 #include <mtk/core/unique_ptr.hpp>
@@ -96,6 +98,22 @@ _throw_out_of_range_exception(size_t idx, size_t size);
 
 
 
+//! @brief Lightweight replacement for std::array.
+//!
+//! @code
+//! #include<mtk/core/array.hpp>
+//! @endcode
+//!
+//! Lightweight as in includes less of the standard library.
+//!
+//! Difference between std::array and mtk::array:
+//! - mtk::array does not support member function reverse iterators (e.g. arr.rbegin()),
+//!   #include <mtk/core/reverse_iterators.hpp> for the free function reverse iterators (e.g. rbegin(arr)).
+//!   The purpose of this is to avoid #include <iterator> if not necessary.
+//! - mtk::array supports dynamic sized arrays by setting N = mtk::dynamic_extent.
+//!
+//! Template Specializations:
+//!	- mtk::array<T, dynamic_extent>
 template<class T
 	,size_t N = dynamic_extent>
 class array
@@ -119,6 +137,9 @@ public:
 
 
 
+	//! @brief Returns the element at position pos.
+	//!
+	//! @pre pos < this->size().
 	constexpr
 	reference
 	operator[](size_type pos)
@@ -127,6 +148,9 @@ public:
 		return *(this->begin() + pos);
 	}
 
+	//! @brief Returns the element at position pos.
+	//!
+	//! @pre pos < this->size().
 	constexpr
 	const_reference
 	operator[](size_type pos) const
@@ -135,6 +159,7 @@ public:
 		return *(this->begin() + pos);
 	}
 
+	//! Returns the element at position pos. Throws std::out_of_range() if pos >= this->size().
 	constexpr
 	reference
 	at(size_type pos)
@@ -145,6 +170,7 @@ public:
 		return *(this->begin() + pos);
 	}
 
+	//! Returns the element at position pos. Throws std::out_of_range() if pos >= this->size().
 	constexpr
 	const_reference
 	at(size_type pos) const
@@ -155,6 +181,9 @@ public:
 		return *(this->begin() + pos);
 	}
 
+	//! @brief Returns the first element.
+	//!
+	//! @pre this->empty() == false.
 	constexpr
 	reference
 	front()
@@ -163,6 +192,9 @@ public:
 		return *this->begin();
 	}
 
+	//! @brief Returns the first element.
+	//!
+	//! @pre this->empty() == false.
 	constexpr
 	const_reference
 	front() const
@@ -171,6 +203,9 @@ public:
 		return *this->begin();
 	}
 
+	//! @brief Returns the last element.
+	//!
+	//! @pre this->empty() == false.
 	constexpr
 	reference
 	back()
@@ -179,6 +214,9 @@ public:
 		return *(this->end() - 1);
 	}
 
+	//! @brief Returns the last element.
+	//!
+	//! @pre this->empty() == false.
 	constexpr
 	const_reference
 	back() const
@@ -187,6 +225,7 @@ public:
 		return *(this->end() - 1);
 	}
 
+	//! Returns a pointer to the first element in the array.
 	constexpr
 	pointer
 	data() noexcept
@@ -194,6 +233,7 @@ public:
 		return reinterpret_cast<pointer>(&this->_data);
 	}
 
+	//! Returns a pointer to the first element in the array.
 	constexpr
 	const_pointer
 	data() const noexcept
@@ -203,6 +243,7 @@ public:
 
 
 
+	//! Returns an iterator to the beginning of the array range.
 	constexpr
 	iterator
 	begin() noexcept
@@ -210,6 +251,7 @@ public:
 		return this->data();
 	}
 
+	//! Returns an iterator to the beginning of the array range.
 	constexpr
 	const_iterator
 	begin() const noexcept
@@ -217,6 +259,7 @@ public:
 		return this->data();
 	}
 
+	//! Returns an iterator to the beginning of the array range.
 	constexpr
 	const_iterator
 	cbegin() const noexcept
@@ -224,6 +267,7 @@ public:
 		return this->begin();
 	}
 
+	//! Returns an iterator to the end of the array range.
 	constexpr
 	iterator
 	end() noexcept
@@ -231,6 +275,7 @@ public:
 		return this->begin() + this->size();
 	}
 
+	//! Returns an iterator to the end of the array range.
 	constexpr
 	const_iterator
 	end() const noexcept
@@ -238,6 +283,7 @@ public:
 		return this->begin() + this->size();
 	}
 
+	//! Returns an iterator to the end of the array range.
 	constexpr
 	const_iterator
 	cend() const noexcept
@@ -247,6 +293,7 @@ public:
 
 
 
+	//! Returns this->size() == 0.
 	[[nodiscard]]
 	constexpr
 	bool
@@ -255,6 +302,7 @@ public:
 		return (this->size() == 0);
 	}
 
+	//! Returns the number of elements in the array.
 	constexpr
 	size_type
 	size() const noexcept
@@ -262,6 +310,7 @@ public:
 		return N;
 	}
 
+	//! Returns the theoretic max number of elements possible to store in the array.
 	constexpr
 	size_type
 	max_size() const noexcept
@@ -269,6 +318,7 @@ public:
 		return this->size();
 	}
 
+	//! Swaps the contents of this array and other.
 	constexpr
 	void
 	swap(array& other)
@@ -278,6 +328,11 @@ public:
 	}
 };
 
+//! @brief Specialization for dynamic_extent.
+//!
+//! @code
+//! #include<mtk/core/array.hpp>
+//! @endcode
 template<class T>
 class array<T, dynamic_extent>
 {
@@ -295,22 +350,25 @@ public:
 	static constexpr size_type extent = dynamic_extent;
 
 
-
+	//! Constructs an empty array.
 	array() noexcept :
 		m_data(nullptr),
 		m_size(0)
 	{ }
 
+	//! Constructs an array with size default constructed elements.
 	explicit
 	array(size_type size) :
 		m_data(size == 0 ? nullptr : mtk::make_unique<value_type[]>(size)),
 		m_size(size)
 	{ }
 
+	//! Constructs an array initialized as a copy of the provided range.
 	array(std::initializer_list<value_type> ilist) :
 		array(ilist.begin(), ilist.end())
 	{ }
 
+	//! Constructs an array initialized as a copy of the provided range.
 	template<class InputIter
 #ifndef MTK_DOXYGEN
 		,_void_t<decltype(*mtk::_declval<InputIter>())>* = nullptr
@@ -343,7 +401,9 @@ public:
 	}
 
 
-
+	//! @brief Returns the element at position pos.
+	//!
+	//! @pre pos < this->size().
 	reference
 	operator[](size_type pos)
 	{
@@ -351,6 +411,9 @@ public:
 		return *(this->begin() + pos);
 	}
 
+	//! @brief Returns the element at position pos.
+	//!
+	//! @pre pos < this->size().
 	const_reference
 	operator[](size_type pos) const
 	{
@@ -358,6 +421,7 @@ public:
 		return *(this->begin() + pos);
 	}
 
+	//! Returns the element at position pos. Throws std::out_of_range() if pos >= this->size().
 	reference
 	at(size_type pos)
 	{
@@ -367,6 +431,7 @@ public:
 		return *(this->begin() + pos);
 	}
 
+	//! Returns the element at position pos. Throws std::out_of_range() if pos >= this->size().
 	const_reference
 	at(size_type pos) const
 	{
@@ -376,6 +441,9 @@ public:
 		return *(this->begin() + pos);
 	}
 
+	//! @brief Returns the first element.
+	//!
+	//! @pre this->empty() == false.
 	reference
 	front()
 	{
@@ -383,6 +451,9 @@ public:
 		return *this->begin();
 	}
 
+	//! @brief Returns the first element.
+	//!
+	//! @pre this->empty() == false.
 	const_reference
 	front() const
 	{
@@ -390,6 +461,9 @@ public:
 		return *this->begin();
 	}
 
+	//! @brief Returns the last element.
+	//!
+	//! @pre this->empty() == false.
 	reference
 	back()
 	{
@@ -397,6 +471,9 @@ public:
 		return *(this->end() - 1);
 	}
 
+	//! @brief Returns the last element.
+	//!
+	//! @pre this->empty() == false.
 	const_reference
 	back() const
 	{
@@ -404,12 +481,14 @@ public:
 		return *(this->end() - 1);
 	}
 
+	//! Returns a pointer to the first element in the array.
 	pointer
 	data() noexcept
 	{
 		return m_data.get();
 	}
 
+	//! Returns a pointer to the first element in the array.
 	const_pointer
 	data() const noexcept
 	{
@@ -418,36 +497,42 @@ public:
 
 
 
+	//! Returns an iterator to the beginning of the array range.
 	iterator
 	begin() noexcept
 	{
 		return this->data();
 	}
 
+	//! Returns an iterator to the beginning of the array range.
 	const_iterator
 	begin() const noexcept
 	{
 		return this->data();
 	}
 
+	//! Returns an iterator to the beginning of the array range.
 	const_iterator
 	cbegin() const noexcept
 	{
 		return this->begin();
 	}
 
+	//! Returns an iterator to the end of the array range.
 	iterator
 	end() noexcept
 	{
 		return this->begin() + this->size();
 	}
 
+	//! Returns an iterator to the end of the array range.
 	const_iterator
 	end() const noexcept
 	{
 		return this->begin() + this->size();
 	}
 
+	//! Returns an iterator to the end of the array range.
 	const_iterator
 	cend() const noexcept
 	{
@@ -456,6 +541,7 @@ public:
 
 
 
+	//! Returns this->size() == 0.
 	[[nodiscard]]
 	bool
 	empty() const noexcept
@@ -463,18 +549,27 @@ public:
 		return (this->size() == 0);
 	}
 
+	//! Returns the number of elements in the array.
 	size_type
 	size() const noexcept
 	{
 		return m_size;
 	}
 
+	//! Returns the theoretic max number of elements possible to store in the array.
 	size_type
 	max_size() const noexcept
 	{
 		return static_cast<size_type>(-1) - 1;
 	}
 
+	//! @brief Resizes the current array to new_size.
+	//!
+	//! If new_size < this->size() then the excess elements are pruned,
+	//! else if new_size > this->size() then the new values are default initialized at the end
+	//! of the current array.
+	//!
+	//! Invalidates all iterators if new_size != this->size().
 	void
 	resize(size_type new_size)
 	{
@@ -493,6 +588,7 @@ public:
 
 
 
+	//! Swaps the contents of this array and other.
 	void
 	swap(array& other) noexcept
 	{
@@ -533,10 +629,13 @@ private:
 		this->swap(tmp);
 	}
 
-	unique_ptr<value_type[]> m_data;
+	unique_ptr<value_type[], empty_pointer_validator> m_data;
 	size_type m_size;
 };
 
+//! @brief Deduction guide.
+//!
+//! @relates array
 template<class T
 	,class... Args
 #ifndef MTK_DOXYGEN
@@ -547,6 +646,9 @@ array(T, Args...) -> array<T, 1 + sizeof...(Args)>;
 
 
 
+//! @brief Swaps the contents of this array and other.
+//!
+//! @relates array
 template<class T
 	,size_t N>
 constexpr
@@ -557,6 +659,9 @@ noexcept(noexcept(a.swap(b)))
 	a.swap(b);
 }
 
+//! @brief Returns true if the contents of lhs and rhs are equal, else false.
+//!
+//! @relates array
 template<class T
 	,size_t N1
 	,size_t N2>
@@ -570,6 +675,9 @@ operator==(const array<T, N1>& lhs, const array<T, N2>& rhs)
 	return impl_array::_equal_range(lhs.begin(), lhs.end(), rhs.begin());
 }
 
+//! @brief Returns false if the contents of lhs and rhs are equal, else true.
+//!
+//! @relates array
 template<class T
 	,size_t N1
 	,size_t N2>
@@ -580,6 +688,9 @@ operator!=(const array<T, N1>& lhs, const array<T, N2>& rhs)
 	return !(lhs == rhs);
 }
 
+//! @brief Returns true if the elements of lhs is lexicographically less than rhs, else false.
+//!
+//! @relates array
 template<class T
 	,size_t N1
 	,size_t N2>
@@ -590,6 +701,9 @@ operator<(const array<T, N1>& lhs, const array<T, N2>& rhs)
 	return impl_array::_less_than_range(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
+//! @brief Returns true if the elements of lhs is lexicographically greater than rhs, else false.
+//!
+//! @relates array
 template<class T
 	,size_t N1
 	,size_t N2>
@@ -600,6 +714,9 @@ operator>(const array<T, N1>& lhs, const array<T, N2>& rhs)
 	return (rhs < lhs);
 }
 
+//! @brief Returns true if the elements of lhs is lexicographically less than or equal to rhs, else false.
+//!
+//! @relates array
 template<class T
 	,size_t N1
 	,size_t N2>
@@ -610,6 +727,9 @@ operator<=(const array<T, N1>& lhs, const array<T, N2>& rhs)
 	return !(rhs < lhs);
 }
 
+//! @brief Returns true if the elements of lhs is lexicographically greater than or equal to rhs, else false.
+//!
+//! @relates array
 template<class T
 	,size_t N1
 	,size_t N2>
