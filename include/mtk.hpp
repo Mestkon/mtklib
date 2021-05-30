@@ -3,6 +3,12 @@
 
 //! @file Includes the entire library.
 
+//! @mainpage
+//!
+//! The mtklib mainpage
+//!
+//! Define MTK_DEBUG project wide for debug builds to enable debug code.
+
 #include <mtk/core.hpp>
 #include <mtk/linalg.hpp>
 #include <mtk/ranges.hpp>

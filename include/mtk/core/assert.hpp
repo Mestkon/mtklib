@@ -1,6 +1,8 @@
 #ifndef MTK_CORE_ASSERT_HPP
 #define MTK_CORE_ASSERT_HPP
 
+//! @file Defines the ASSERT macro
+
 namespace mtk {
 
 [[noreturn]]
@@ -16,9 +18,18 @@ _assertion_handler(const char* what, const char* file, int line) noexcept;
 	#define MTK_IMPL_ASSERT(...) MTK_IMPL_DUD_ASSERT(__VA_ARGS__)
 #endif
 
+//! @addtogroup core
+//! @{
 
-
+//! @brief Asserts that the given expression evaluates to true.
+//!
+//! Prints assertion message and terminates if the given expression
+//! does not evaluate to true, else does nothing.
+//!
+//! Expands to (void)0 if MTK_DEBUG is not defined.
 #define MTK_ASSERT(...) MTK_IMPL_ASSERT(__VA_ARGS__)
+
+//! @}
 
 } // namespace mtk
 

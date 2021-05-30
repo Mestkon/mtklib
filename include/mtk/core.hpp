@@ -1,6 +1,8 @@
 #ifndef MTK_CORE_HPP
 #define MTK_CORE_HPP
 
+//! @file Includes the core module
+
 #include <mtk/core/array.hpp>
 #include <mtk/core/assert.hpp>
 #include <mtk/core/byte_cast.hpp>
@@ -22,5 +24,7 @@
 #include <mtk/core/unique_ptr.hpp>
 #include <mtk/core/version.hpp>
 #include <mtk/core/zstring_view.hpp>
+
+//! @defgroup core mtk/core.hpp
 
 #endif

@@ -15,6 +15,10 @@
 #include <type_traits>
 
 namespace mtk {
+
+//! @addtogroup core
+//! @{
+
 namespace impl_array {
 
 template<class T
@@ -739,6 +743,8 @@ operator>=(const array<T, N1>& lhs, const array<T, N2>& rhs)
 {
 	return !(lhs < rhs);
 }
+
+//! @}
 
 } // namespace mtk
 
