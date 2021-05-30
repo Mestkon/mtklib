@@ -1,6 +1,9 @@
 #ifndef MTK_CORE_NARROW_CAST_HPP
 #define MTK_CORE_NARROW_CAST_HPP
 
+//! @file
+//! Contains mtk::narrow_cast
+
 #include <mtk/core/saturate_cast.hpp>
 #include <mtk/core/impl/require.hpp>
 
@@ -9,6 +12,14 @@
 
 namespace mtk {
 
+//! @addtogroup core
+//! @{
+
+//! @brief Thrown by mtk::narrow_cast.
+//!
+//! @code
+//! #include <mtk/core/narrow_cast.hpp>
+//! @endcode
 struct narrowing_exception :
 	std::exception
 {
@@ -24,6 +35,20 @@ _throw_narrowing_exception();
 
 inline namespace casts {
 
+//! @addtogroup core
+//! @{
+
+//! @brief Returns static_cast<U>(val), throws exception if narrowing occured.
+//!
+//! @code
+//! #include <mtk/core/narrow_cast.hpp>
+//! @endcode
+//!
+//! Throws mtk::narrowing_exception if val can not be represented
+//! in the type U.
+//!
+//! @pre U must be arithmetic.
+//! @pre T must be arithmetic.
 template<class U
 	,class T
 #ifndef MTK_DOXYGEN
@@ -41,7 +66,12 @@ narrow_cast(T val)
 	return static_cast<U>(val);
 }
 
+//! @}
+
 } // namespace casts
+
+//! @}
+
 } // namespace mtk
 
 
