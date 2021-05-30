@@ -1,6 +1,9 @@
 #ifndef MTK_CORE_ITERATOR_TRAITS_HPP
 #define MTK_CORE_ITERATOR_TRAITS_HPP
 
+//! @file Contains traits to check if a type satisfies
+//! the different iterator named requirements.
+
 #include <mtk/core/impl/declval.hpp>
 #include <mtk/core/impl/require.hpp>
 
@@ -8,22 +11,61 @@
 #include <type_traits>
 
 namespace mtk {
+
+//! @addtogroup core
+//! @{
+
+//! @brief Contains typedefs for the std::iterator_traits types.
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 namespace iter {
 
+//! @addtogroup core
+//! @{
+
+//! @brief Typedef
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class Iter>
 using value_type = typename std::iterator_traits<Iter>::value_type;
 
+//! @brief Typedef
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class Iter>
 using reference = typename std::iterator_traits<Iter>::reference;
 
+//! @brief Typedef
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class Iter>
 using pointer = typename std::iterator_traits<Iter>::pointer;
 
+//! @brief Typedef
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class Iter>
 using difference_type = typename std::iterator_traits<Iter>::difference_type;
 
+//! @brief Typedef
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class Iter>
 using iterator_category = typename std::iterator_traits<Iter>::iterator_category;
+
+//! @}
 
 } // namespace iter
 
@@ -160,81 +202,148 @@ struct is_random_access_iterator_helper<T
 
 } // namespace impl_iterator_traits
 
+//! @brief Type trait to check if a class T satisfies the
+//! iterator named requirement.
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class T>
 struct is_iterator
 #ifndef MTK_DOXYGEN
-	:impl_iterator_traits::is_iterator_helper<T>
+	: impl_iterator_traits::is_iterator_helper<T>
 #endif
 { };
 
+//! @brief Type trait to check if a class T satisfies the
+//! input iterator named requirement.
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class T>
 struct is_input_iterator
 #ifndef MTK_DOXYGEN
-	:impl_iterator_traits::is_input_iterator_helper<T>
+	: impl_iterator_traits::is_input_iterator_helper<T>
 #endif
 { };
 
+//! @brief Type trait to check if a class T satisfies the
+//! output iterator named requirement for output type OutputT.
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class T
 	,class OutputT>
 struct is_output_iterator
 #ifndef MTK_DOXYGEN
-	:impl_iterator_traits::is_output_iterator_helper<T, OutputT>
+	: impl_iterator_traits::is_output_iterator_helper<T, OutputT>
 #endif
 { };
 
+//! @brief Type trait to check if a class T satisfies the
+//! forward iterator named requirement.
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class T>
 struct is_forward_iterator
 #ifndef MTK_DOXYGEN
-	:impl_iterator_traits::is_forward_iterator_helper<T>
+	: impl_iterator_traits::is_forward_iterator_helper<T>
 #endif
 { };
 
+//! @brief Type trait to check if a class T satisfies the
+//! bidirectional iterator named requirement.
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class T>
 struct is_bidirectional_iterator
 #ifndef MTK_DOXYGEN
-	:impl_iterator_traits::is_bidirectional_iterator_helper<T>
+	: impl_iterator_traits::is_bidirectional_iterator_helper<T>
 #endif
 { };
 
+//! @brief Type trait to check if a class T satisfies the
+//! random access iterator named requirement.
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class T>
 struct is_random_access_iterator
 #ifndef MTK_DOXYGEN
-	:impl_iterator_traits::is_random_access_iterator_helper<T>
+	: impl_iterator_traits::is_random_access_iterator_helper<T>
 #endif
 { };
 
 
-
+//! @brief Shortcut for is_iterator_t<T>::value.
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class T>
 inline constexpr
 bool
 is_iterator_v = is_iterator<T>::value;
 
+//! @brief Shortcut for is_input_iterator<T>::value
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class T>
 inline constexpr
 bool
 is_input_iterator_v = is_input_iterator<T>::value;
 
+//! @brief Shortcut for is_output_iterator<T, OutputT>::value.
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class T
 	,class OutputT>
 inline constexpr
 bool
 is_output_iterator_v = is_output_iterator<T, OutputT>::value;
 
+//! @brief Shortcut for is_forward_iterator<T>::value.
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class T>
 inline constexpr
 bool
 is_forward_iterator_v = is_forward_iterator<T>::value;
 
+//! @brief Shortcut for is_bidirectional_iterator<T>::value.
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class T>
 inline constexpr
 bool
 is_bidirectional_iterator_v = is_bidirectional_iterator<T>::value;
 
+//! @brief Shortcut for is_random_access_iterator<T>::value.
+//!
+//! @code
+//! #include <mtk/core/iterator_traits.hpp>
+//! @endcode
 template<class T>
 inline constexpr
 bool
 is_random_access_iterator_v = is_random_access_iterator<T>::value;
+
+//! @}
 
 } // namespace mtk
 

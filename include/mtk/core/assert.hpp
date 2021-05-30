@@ -1,7 +1,7 @@
 #ifndef MTK_CORE_ASSERT_HPP
 #define MTK_CORE_ASSERT_HPP
 
-//! @file Defines the ASSERT macro
+//! @file Contains MTK_ASSERT
 
 namespace mtk {
 

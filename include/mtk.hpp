@@ -15,6 +15,15 @@
 
 //! All non-macro symbols are defined inside this namespace.
 namespace mtk {
+
+//! Inline. Contains simple typedefs.
+inline namespace types {
+} // namespace types
+
+//! Inline. Contains std-like cast functions.
+inline namespace casts {
+} // namespace casts
+
 } // namespace mtk
 
 #endif
