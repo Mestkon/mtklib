@@ -90,7 +90,10 @@ public:
 	>
 	operator StdStringView() const noexcept
 	{
-		return StdStringView(this->data(), this->size() + 1);
+		if (!this->empty())
+			return StdStringView(this->data(), this->size() + 1);
+		else
+			return StdStringView();
 	}
 
 

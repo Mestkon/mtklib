@@ -1,6 +1,7 @@
 #include <mtk/core/zstring_view.hpp>
 
 #include <iostream>
+#include <string_view>
 
 namespace mtk {
 
@@ -37,7 +38,7 @@ operator<(zstring_view lhs, zstring_view rhs) noexcept
 std::ostream&
 operator<<(std::ostream& os, zstring_view zv)
 {
-	os << zv.data();
+	os << std::string_view(zv);
 	return os;
 }
 
