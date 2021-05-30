@@ -23,6 +23,10 @@ _assertion_handler(const char* what, const char* file, int line) noexcept;
 
 //! @brief Asserts that the given expression evaluates to true.
 //!
+//!	@code
+//! #include <mtk/core/assert.hpp>
+//! @endcode
+//!
 //! Prints assertion message and terminates if the given expression
 //! does not evaluate to true, else does nothing.
 //!
