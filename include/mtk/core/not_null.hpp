@@ -20,7 +20,7 @@ namespace mtk {
 //! @{
 
 //! @brief Pointer-like class which invokes the validator
-//! before assigning any values.
+//! before assigning to the contained pointer.
 //!
 //! @code
 //! #include <mtk/core/not_null.hpp>
