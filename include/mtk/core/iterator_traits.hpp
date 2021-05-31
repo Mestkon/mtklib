@@ -70,7 +70,8 @@ using iterator_category = typename std::iterator_traits<Iter>::iterator_category
 
 } // namespace iter
 
-namespace impl_iterator_traits {
+namespace impl_core {
+namespace iterator_traits {
 
 template<class T
 	,class = void>
@@ -201,7 +202,8 @@ struct _is_random_access_iterator_helper<T
 		,_require<std::is_constructible_v<bool, decltype(mtk::_declval<const T>() <= mtk::_declval<const T>())>>
 	>> : std::true_type { };
 
-} // namespace impl_iterator_traits
+} // namespace iterator_traits
+} // namespace impl_core
 
 //! @brief Type trait to check if a class T satisfies the
 //! iterator named requirement.
@@ -212,7 +214,7 @@ struct _is_random_access_iterator_helper<T
 template<class T>
 struct is_iterator
 #ifndef MTK_DOXYGEN
-	: impl_iterator_traits::_is_iterator_helper<T>
+	: impl_core::iterator_traits::_is_iterator_helper<T>
 #endif
 { };
 
@@ -225,7 +227,7 @@ struct is_iterator
 template<class T>
 struct is_input_iterator
 #ifndef MTK_DOXYGEN
-	: impl_iterator_traits::_is_input_iterator_helper<T>
+	: impl_core::iterator_traits::_is_input_iterator_helper<T>
 #endif
 { };
 
@@ -239,7 +241,7 @@ template<class T
 	,class OutputT>
 struct is_output_iterator
 #ifndef MTK_DOXYGEN
-	: impl_iterator_traits::_is_output_iterator_helper<T, OutputT>
+	: impl_core::iterator_traits::_is_output_iterator_helper<T, OutputT>
 #endif
 { };
 
@@ -252,7 +254,7 @@ struct is_output_iterator
 template<class T>
 struct is_forward_iterator
 #ifndef MTK_DOXYGEN
-	: impl_iterator_traits::_is_forward_iterator_helper<T>
+	: impl_core::iterator_traits::_is_forward_iterator_helper<T>
 #endif
 { };
 
@@ -265,7 +267,7 @@ struct is_forward_iterator
 template<class T>
 struct is_bidirectional_iterator
 #ifndef MTK_DOXYGEN
-	: impl_iterator_traits::_is_bidirectional_iterator_helper<T>
+	: impl_core::iterator_traits::_is_bidirectional_iterator_helper<T>
 #endif
 { };
 
@@ -278,7 +280,7 @@ struct is_bidirectional_iterator
 template<class T>
 struct is_random_access_iterator
 #ifndef MTK_DOXYGEN
-	: impl_iterator_traits::_is_random_access_iterator_helper<T>
+	: impl_core::iterator_traits::_is_random_access_iterator_helper<T>
 #endif
 { };
 
