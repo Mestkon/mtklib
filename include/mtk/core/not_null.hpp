@@ -91,7 +91,7 @@ public:
 		return *m_ptr;
 	}
 
-	//! Retruns the stored pointer value.
+	//! Returns the stored pointer value.
 	constexpr
 	pointer_type
 	operator->() const noexcept
