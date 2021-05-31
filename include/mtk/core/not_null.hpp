@@ -33,9 +33,9 @@ template<class T
 class not_null
 {
 public:
-	//! typedef for T*;
+	//! typedef for T*.
 	using pointer_type = T*;
-	//! typedef for T;
+	//! typedef for T.
 	using element_type = T;
 	//! typedef for Validator.
 	using validator_type = Validator;
@@ -149,9 +149,9 @@ template<class T
 class not_null<T[], Validator>
 {
 public:
-	//! typedef for T*;
+	//! typedef for T*.
 	using pointer_type = T*;
-	//! typedef for T;
+	//! typedef for T.
 	using element_type = T;
 	//! typedef for Validator.
 	using validator_type = Validator;
