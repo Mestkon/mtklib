@@ -409,6 +409,9 @@ private:
 
 //! @}
 
+//! @brief Swaps the contained pointers.
+//!
+//! @relates not_null
 template<class T
 	,class V>
 constexpr
