@@ -7,6 +7,7 @@
 #include <mtk/core/assert.hpp>
 #include <mtk/core/types.hpp>
 #include <mtk/core/unique_ptr.hpp>
+#include <mtk/core/impl/algorithm.hpp>
 #include <mtk/core/impl/declval.hpp>
 #include <mtk/core/impl/dynamic_extent.hpp>
 #include <mtk/core/impl/require.hpp>
@@ -20,7 +21,8 @@ namespace mtk {
 //! @addtogroup core
 //! @{
 
-namespace impl_array {
+namespace impl_core {
+namespace array {
 
 template<class T
 	,class = void>
@@ -32,74 +34,15 @@ struct _is_subtractable<T
 		,_void_t<decltype(mtk::_declval<T>() - mtk::_declval<T>())>
 	> : std::true_type { };
 
-template<class Iter
-	,class Iter2>
-constexpr
-void
-_copy_range(Iter first, Iter last, Iter2 dst)
-{
-	while (first != last) {
-		*(dst++) = *(first++);
-	}
-}
 
-template<class Iter
-	,class Iter2>
-constexpr
-void
-_move_range(Iter first, Iter last, Iter2 dst)
-{
-	while (first != last) {
-		*(dst++) = mtk::_move(*(first++));
-	}
-}
-
-template<class Iter>
-constexpr
-void
-_swap_range(Iter first1, Iter last1, Iter first2)
-{
-	while (first1 != last1) {
-		mtk::_swap(*(first1++), *(first2++));
-	}
-}
-
-template<class Iter>
-constexpr
-bool
-_equal_range(Iter first1, Iter last1, Iter first2)
-{
-	while (first1 != last1) {
-		if (!(*(first1++) == *(first2++)))
-			return false;
-	}
-
-	return true;
-}
-
-template<class Iter>
-constexpr
-bool
-_less_than_range(Iter first1, Iter last1, Iter first2, Iter last2)
-{
-	while ((first1 != last1) && (first2 != last2)) {
-		if (*first1 < *first2)
-			return true;
-		else if (*first2 < *first1)
-			return false;
-
-		++first1;
-		++first2;
-	}
-
-	return ((first1 == last1) && (first2 != last2));
-}
 
 [[noreturn]]
 void
 _throw_out_of_range_exception(size_t idx, size_t size);
 
-} // namespace impl_array
+
+} // namespace array
+} // namespace impl_core
 
 
 
@@ -170,7 +113,7 @@ public:
 	at(size_type pos)
 	{
 		if (pos >= this->size())
-			mtk::impl_array::_throw_out_of_range_exception(pos, this->size());
+			mtk::impl_core::array::_throw_out_of_range_exception(pos, this->size());
 
 		return *(this->begin() + pos);
 	}
@@ -181,7 +124,7 @@ public:
 	at(size_type pos) const
 	{
 		if (pos >= this->size())
-			mtk::impl_array::_throw_out_of_range_exception(pos, this->size());
+			mtk::impl_core::array::_throw_out_of_range_exception(pos, this->size());
 
 		return *(this->begin() + pos);
 	}
@@ -329,7 +272,7 @@ public:
 	swap(array& other)
 	noexcept(std::is_nothrow_swappable_v<decltype(_data)>)
 	{
-		impl_array::_swap_range(this->begin(), this->end(), other.begin());
+		mtk::_swap_range(this->begin(), this->end(), other.begin());
 	}
 };
 
@@ -383,7 +326,7 @@ public:
 	array(InputIter first, InputIter last) :
 		array()
 	{
-		if constexpr (impl_array::_is_subtractable<InputIter>::value)
+		if constexpr (impl_core::array::_is_subtractable<InputIter>::value)
 			this->_assign_ra_iter(first, last);
 		else
 			this->_assign_input_iter(first, last);
@@ -431,7 +374,7 @@ public:
 	at(size_type pos)
 	{
 		if (pos >= this->size())
-			mtk::impl_array::_throw_out_of_range_exception(pos, this->size());
+			mtk::impl_core::array::_throw_out_of_range_exception(pos, this->size());
 
 		return *(this->begin() + pos);
 	}
@@ -441,7 +384,7 @@ public:
 	at(size_type pos) const
 	{
 		if (pos >= this->size())
-			mtk::impl_array::_throw_out_of_range_exception(pos, this->size());
+			mtk::impl_core::array::_throw_out_of_range_exception(pos, this->size());
 
 		return *(this->begin() + pos);
 	}
@@ -584,9 +527,9 @@ public:
 		array tmp(new_size);
 		const size_type transfer_size = (new_size < this->size() ? new_size : this->size());
 		if constexpr (std::is_nothrow_move_assignable_v<value_type>)
-			impl_array::_move_range(this->begin(), this->begin() + transfer_size, tmp.begin());
+			mtk::_move_range(this->begin(), this->begin() + transfer_size, tmp.begin());
 		else
-			impl_array::_copy_range(this->begin(), this->begin() + transfer_size, tmp.begin());
+			mtk::_copy_range(this->begin(), this->begin() + transfer_size, tmp.begin());
 
 		this->swap(tmp);
 	}
@@ -620,7 +563,7 @@ private:
 		}
 
 		array final_array(count);
-		impl_array::_move_range(tmp.begin(), tmp.begin() + count, final_array.begin());
+		mtk::_move_range(tmp.begin(), tmp.begin() + count, final_array.begin());
 		this->swap(final_array);
 	}
 
@@ -630,7 +573,7 @@ private:
 	{
 		MTK_ASSERT((last - first) >= 0);
 		array tmp(last - first);
-		impl_array::_copy_range(first, last, tmp.begin());
+		mtk::_copy_range(first, last, tmp.begin());
 		this->swap(tmp);
 	}
 
@@ -679,7 +622,7 @@ operator==(const array<T, N1>& lhs, const array<T, N2>& rhs)
 	if (lhs.size() != rhs.size())
 		return false;
 
-	return impl_array::_equal_range(lhs.begin(), lhs.end(), rhs.begin());
+	return mtk::_equal_range(lhs.begin(), lhs.end(), rhs.begin());
 }
 
 //! @brief Returns false if the contents of lhs and rhs are equal, else true.
@@ -705,7 +648,7 @@ constexpr
 bool
 operator<(const array<T, N1>& lhs, const array<T, N2>& rhs)
 {
-	return impl_array::_less_than_range(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	return mtk::_less_than_range(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
 //! @brief Returns true if the elements of lhs is lexicographically greater than rhs, else false.

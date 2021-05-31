@@ -4,7 +4,8 @@
 #include <stdexcept>
 
 namespace mtk {
-namespace impl_array {
+namespace impl_core {
+namespace array {
 
 void _throw_out_of_range_exception(size_t idx, size_t size)
 {
@@ -13,7 +14,6 @@ void _throw_out_of_range_exception(size_t idx, size_t size)
 	throw std::out_of_range(buf);
 }
 
-
-
-} // namespace impl_array
+} // namespace array
+} // namespace impl_core
 } // namespace mtk

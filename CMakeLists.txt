@@ -43,6 +43,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/version.hpp
     include/mtk/core/zstring_view.hpp
     include/mtk/core/impl/addressof.hpp
+    include/mtk/core/impl/algorithm.hpp
     include/mtk/core/impl/clamp.hpp
     include/mtk/core/impl/declval.hpp
     include/mtk/core/impl/dynamic_extent.hpp
