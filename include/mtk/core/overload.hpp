@@ -13,7 +13,8 @@ namespace mtk {
 //! @addtogroup core
 //! @{
 
-namespace impl_overload {
+namespace impl_core {
+namespace overload {
 
 template<class Func>
 struct const_function { };
@@ -25,7 +26,8 @@ struct const_function<R(Args...)>
 	using type = R(Args...) const;
 };
 
-} // namespace impl_overload
+} // namespace overload
+} // namespace impl_core
 
 //! @brief Returns a pointer to the selected function overload.
 //!
@@ -90,7 +92,7 @@ template<class Func
 >
 constexpr
 auto
-overload(typename impl_overload::const_function<Func>::type T::* const& ptr) noexcept
+overload(typename impl_core::overload::const_function<Func>::type T::* const& ptr) noexcept
 {
 	return ptr;
 }
