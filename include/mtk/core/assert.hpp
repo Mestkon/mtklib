@@ -6,11 +6,17 @@
 
 namespace mtk {
 
+namespace impl_core {
+namespace assert {
+
 [[noreturn]]
 void
 _assertion_handler(const char* what, const char* file, int line) noexcept;
 
-#define MTK_IMPL_LIVE_ASSERT(...) static_cast<void>(!static_cast<bool>(__VA_ARGS__) && (mtk::_assertion_handler(#__VA_ARGS__, __FILE__, __LINE__), 1))
+} // namespace assert
+} // namespace impl_core
+
+#define MTK_IMPL_LIVE_ASSERT(...) static_cast<void>(!static_cast<bool>(__VA_ARGS__) && (mtk::impl_core::assert::_assertion_handler(#__VA_ARGS__, __FILE__, __LINE__), 1))
 #define MTK_IMPL_DUD_ASSERT(...) static_cast<void>(0)
 
 #ifdef MTK_DEBUG
