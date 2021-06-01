@@ -1,6 +1,9 @@
 #ifndef MTK_CORE_SATURATE_CAST_HPP
 #define MTK_CORE_SATURATE_CAST_HPP
 
+//! @file
+//! Contains mtk::saturate_cast
+
 #include <mtk/core/types.hpp>
 #include <mtk/core/impl/clamp.hpp>
 #include <mtk/core/impl/require.hpp>
@@ -11,6 +14,23 @@
 namespace mtk {
 inline namespace casts {
 
+//! @addtogroup core
+//! @{
+
+//! @brief Clamps val to the domain of U, then static_casts it to U.
+//!
+//! @code
+//! #include <mtk/core/saturate_cast.hpp>
+//! @endcode
+//!
+//! If val is NaN and U does not support NaN, then U() is returned.
+//! The specific NaN bit encoding is not necessary presereved.
+//!
+//! If U can represent infinity and the magnitude of val cannot be represented
+//! as a finite value in U, then the corresponding signed infinity is returned.
+//!
+//! @pre U must be an arithmetic type.
+//! @pre T must be an arithmetic type.
 template<class U
 	,class T
 #ifndef MTK_DOXYGEN
@@ -38,14 +58,12 @@ saturate_cast(T val) noexcept
 		|| std::numeric_limits<U>::has_signaling_NaN;
 
 	if constexpr (t_has_nan && !u_has_nan) {
-		if (val != val) {
+		if (val != val)
 			return U();
-		}
 	}
 
 	constexpr bool t_in_domain_of_u = (t_min_wide >= u_min_wide) && (t_max_wide <= u_max_wide);
-	constexpr bool infinity_compatible = (std::numeric_limits<T>::has_infinity && std::numeric_limits<U>::has_infinity) ||
-		!std::numeric_limits<T>::has_infinity;
+	constexpr bool infinity_compatible = std::numeric_limits<U>::has_infinity || !std::numeric_limits<T>::has_infinity;
 
 	if constexpr (t_in_domain_of_u && infinity_compatible) {
 		return static_cast<U>(val);
@@ -56,6 +74,8 @@ saturate_cast(T val) noexcept
 		return static_cast<U>(mtk::_clamp(val, min, max));
 	}
 }
+
+//! @}
 
 } // namespace casts
 } // namespace mtk
