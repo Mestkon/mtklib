@@ -20,6 +20,9 @@ namespace mtk {
 //! @{
 
 #ifdef MTK_DEBUG
+namespace impl_core {
+namespace zstring_view {
+
 constexpr
 size_t
 _constexpr_strlen(const char* s) noexcept
@@ -28,6 +31,9 @@ _constexpr_strlen(const char* s) noexcept
 	while (*(e++) != '\0');
 	return static_cast<size_t>(e - s - 1);
 }
+
+} // namespace zstring_view
+} // namespace impl_core
 #endif
 
 //! @brief null-terminated version std::string_view
@@ -78,7 +84,7 @@ public:
 		m_size(count)
 	{
 		MTK_ASSERT(ptr != nullptr);
-		MTK_ASSERT(count == _constexpr_strlen(ptr));
+		MTK_ASSERT(count == mtk::impl_core::zstring_view::_constexpr_strlen(ptr));
 	}
 
 	//! @brief Constructs a zstring_view from ptr.
@@ -357,14 +363,22 @@ swap(zstring_view& a, zstring_view& b) noexcept
 }
 
 inline namespace literals {
+
+//! Inline. Contains literals for zstring_view.
 inline namespace zstring_view_literals {
 
+//! @addtogroup core
+//! @{
+
+//! Returns the string literal as a zstring_view.
 constexpr
 zstring_view
 operator""_zv(const char* str, size_t len) noexcept
 {
 	return zstring_view(str, len);
 }
+
+//! @}
 
 } // namespace zstring_view_literals
 } // namespace literals

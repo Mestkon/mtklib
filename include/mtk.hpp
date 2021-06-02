@@ -25,6 +25,10 @@ inline namespace types {
 inline namespace casts {
 } // namespace casts
 
+//! Inline. Contains type literals.
+inline namespace literals {
+} // namespace literals
+
 } // namespace mtk
 
 #endif
