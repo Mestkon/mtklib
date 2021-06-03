@@ -16,7 +16,7 @@
 
 namespace mtk {
 
-//! @addtogroup
+//! @addtogroup core
 //! @{
 
 //! @brief Pointer-like class which invokes the validator

@@ -87,7 +87,7 @@ public:
 
 	//! @brief Returns the element at position pos.
 	//!
-	//! @pre pos < this->size().
+	//! @pre pos < size().
 	constexpr
 	reference
 	operator[](size_type pos)
@@ -98,7 +98,7 @@ public:
 
 	//! @brief Returns the element at position pos.
 	//!
-	//! @pre pos < this->size().
+	//! @pre pos < size().
 	constexpr
 	const_reference
 	operator[](size_type pos) const
@@ -107,7 +107,7 @@ public:
 		return *(this->begin() + pos);
 	}
 
-	//! Returns the element at position pos. Throws std::out_of_range() if pos >= this->size().
+	//! Returns the element at position pos. Throws std::out_of_range() if pos >= size().
 	constexpr
 	reference
 	at(size_type pos)
@@ -118,7 +118,7 @@ public:
 		return *(this->begin() + pos);
 	}
 
-	//! Returns the element at position pos. Throws std::out_of_range() if pos >= this->size().
+	//! Returns the element at position pos. Throws std::out_of_range() if pos >= size().
 	constexpr
 	const_reference
 	at(size_type pos) const
@@ -131,7 +131,7 @@ public:
 
 	//! @brief Returns the first element.
 	//!
-	//! @pre this->empty() == false.
+	//! @pre empty() == false.
 	constexpr
 	reference
 	front()
@@ -142,7 +142,7 @@ public:
 
 	//! @brief Returns the first element.
 	//!
-	//! @pre this->empty() == false.
+	//! @pre empty() == false.
 	constexpr
 	const_reference
 	front() const
@@ -153,7 +153,7 @@ public:
 
 	//! @brief Returns the last element.
 	//!
-	//! @pre this->empty() == false.
+	//! @pre empty() == false.
 	constexpr
 	reference
 	back()
@@ -164,7 +164,7 @@ public:
 
 	//! @brief Returns the last element.
 	//!
-	//! @pre this->empty() == false.
+	//! @pre empty() == false.
 	constexpr
 	const_reference
 	back() const
@@ -241,7 +241,7 @@ public:
 
 
 
-	//! Returns this->size() == 0.
+	//! Returns size() == 0.
 	[[nodiscard]]
 	constexpr
 	bool
@@ -351,7 +351,7 @@ public:
 
 	//! @brief Returns the element at position pos.
 	//!
-	//! @pre pos < this->size().
+	//! @pre pos < size().
 	reference
 	operator[](size_type pos)
 	{
@@ -361,7 +361,7 @@ public:
 
 	//! @brief Returns the element at position pos.
 	//!
-	//! @pre pos < this->size().
+	//! @pre pos < size().
 	const_reference
 	operator[](size_type pos) const
 	{
@@ -369,7 +369,7 @@ public:
 		return *(this->begin() + pos);
 	}
 
-	//! Returns the element at position pos. Throws std::out_of_range() if pos >= this->size().
+	//! Returns the element at position pos. Throws std::out_of_range() if pos >= size().
 	reference
 	at(size_type pos)
 	{
@@ -379,7 +379,7 @@ public:
 		return *(this->begin() + pos);
 	}
 
-	//! Returns the element at position pos. Throws std::out_of_range() if pos >= this->size().
+	//! Returns the element at position pos. Throws std::out_of_range() if pos >= size().
 	const_reference
 	at(size_type pos) const
 	{
@@ -391,7 +391,7 @@ public:
 
 	//! @brief Returns the first element.
 	//!
-	//! @pre this->empty() == false.
+	//! @pre empty() == false.
 	reference
 	front()
 	{
@@ -401,7 +401,7 @@ public:
 
 	//! @brief Returns the first element.
 	//!
-	//! @pre this->empty() == false.
+	//! @pre empty() == false.
 	const_reference
 	front() const
 	{
@@ -411,7 +411,7 @@ public:
 
 	//! @brief Returns the last element.
 	//!
-	//! @pre this->empty() == false.
+	//! @pre empty() == false.
 	reference
 	back()
 	{
@@ -421,7 +421,7 @@ public:
 
 	//! @brief Returns the last element.
 	//!
-	//! @pre this->empty() == false.
+	//! @pre empty() == false.
 	const_reference
 	back() const
 	{
@@ -489,7 +489,7 @@ public:
 
 
 
-	//! Returns this->size() == 0.
+	//! Returns size() == 0.
 	[[nodiscard]]
 	bool
 	empty() const noexcept
@@ -513,11 +513,11 @@ public:
 
 	//! @brief Resizes the current array to new_size.
 	//!
-	//! If new_size < this->size() then the excess elements are pruned,
-	//! else if new_size > this->size() then the new values are default initialized at the end
+	//! If new_size < size() then the excess elements are pruned,
+	//! else if new_size > size() then the new values are default initialized at the end
 	//! of the current array.
 	//!
-	//! Invalidates all iterators if new_size != this->size().
+	//! Invalidates all iterators if new_size != size().
 	void
 	resize(size_type new_size)
 	{
