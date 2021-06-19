@@ -52,7 +52,11 @@ using std::uintptr_t;
 	defined(UINT8_MAX) && defined(UINT16_MAX) && defined(UINT32_MAX) && defined(UINT64_MAX)) || \
 	defined(MTK_DOXYGEN)
 
-	//! Defined if (u)intN_t types are available
+	//! @brief Defined if (u)intN_t types are available.
+	//!
+	//! @code
+	//! #include <mtk/core/types.hpp>
+	//! @endcode
 	#define MTK_FIXED_WIDTH_INTS
 
 	//! Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
