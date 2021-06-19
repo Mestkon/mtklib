@@ -39,7 +39,7 @@ public:
 	~abstract_any_iterator() = default;
 
 	virtual
-	unique_ptr<abstract_any_iterator, asserting_pointer_validator>
+	unique_ptr<abstract_any_iterator>
 	clone() const = 0;
 
 	virtual
@@ -81,20 +81,20 @@ public:
 
 template<class Iter
 	,class T>
-class any_iterator_storage :
+class any_iterator final :
 	public abstract_any_iterator<T>
 {
 public:
-	any_iterator_storage(Iter iter) :
+	any_iterator(Iter iter) :
 		m_iter(iter)
 	{ }
 
-	~any_iterator_storage() override = default;
+	~any_iterator() override = default;
 
-	unique_ptr<abstract_any_iterator<T>, asserting_pointer_validator>
+	unique_ptr<abstract_any_iterator<T>>
 	clone() const override
 	{
-		return mtk::make_unique<any_iterator_storage>(m_iter);
+		return mtk::make_unique<any_iterator>(m_iter);
 	}
 
 	T
@@ -153,7 +153,7 @@ public:
 	difference(const abstract_any_iterator<T>& other) const override
 	{
 		if constexpr(is_random_access_iterator_v<Iter>) {
-			const auto* p = dynamic_cast<const any_iterator_storage*>(&other);
+			const auto* p = dynamic_cast<const any_iterator*>(&other);
 			if (!p)
 				mtk::_throw_bad_any_iterator_operation();
 
@@ -167,9 +167,9 @@ public:
 	bool
 	compare_equal(const abstract_any_iterator<T>& other) const override
 	{
-		const auto* p = dynamic_cast<const any_iterator_storage*>(&other);
+		const auto* p = dynamic_cast<const any_iterator*>(&other);
 		if (!p)
-			mtk::_throw_bad_any_iterator_operation();
+			return false;
 
 		return (m_iter == p->m_iter);
 	}
@@ -178,7 +178,7 @@ public:
 	compare_less_than(const abstract_any_iterator<T>& other) const override
 	{
 		if constexpr (is_random_access_iterator_v<Iter>) {
-			const auto* p = dynamic_cast<const any_iterator_storage*>(&other);
+			const auto* p = dynamic_cast<const any_iterator*>(&other);
 			if (!p)
 				mtk::_throw_bad_any_iterator_operation();
 
@@ -191,6 +191,152 @@ public:
 
 private:
 	Iter m_iter;
+};
+
+template<class T>
+class any_iterator_storage
+{
+public:
+	any_iterator_storage() :
+		m_ptr()
+	{ }
+
+	template<class Iter>
+	any_iterator_storage(Iter iter) :
+		m_ptr(mtk::make_unique<any_iterator<Iter, T>>(iter))
+	{ }
+
+	any_iterator_storage(const any_iterator_storage& other) :
+		m_ptr(other.m_ptr ? other.m_ptr->clone() : nullptr)
+	{ }
+
+	any_iterator_storage(any_iterator_storage&& other) noexcept :
+		m_ptr(mtk::_move(other.m_ptr))
+	{ }
+
+	any_iterator_storage&
+	operator=(any_iterator_storage rhs) noexcept
+	{
+		this->swap(rhs);
+		return *this;
+	}
+
+	T
+	dereference() const
+	{
+		return m_ptr->dereference();
+	}
+
+	auto
+	address() const
+	{
+		if constexpr (std::is_reference_v<T>) {
+			return mtk::_addressof(**this);
+		} else {
+			struct {
+				T value;
+				const T*
+				operator->() const { return mtk::_addressof(this->value); }
+			} ret {this->dereference()};
+			return ret;
+		}
+	}
+
+	T
+	dereference(ptrdiff_t idx) const
+	{
+		return m_ptr->dereference(idx);
+	}
+
+	void
+	increment()
+	{
+		m_ptr->increment();
+	}
+
+	void
+	decrement()
+	{
+		m_ptr->decrement();
+	}
+
+	void
+	increment(ptrdiff_t n)
+	{
+		m_ptr->increment(n);
+	}
+
+	void
+	decrement(ptrdiff_t n)
+	{
+		m_ptr->decrement(n);
+	}
+
+	ptrdiff_t
+	difference(const any_iterator_storage& other) const
+	{
+		if (!m_ptr || !other.m_ptr)
+			return 0;
+
+		return m_ptr->difference(*other.m_ptr);
+	}
+
+	bool
+	compare_equal(const any_iterator_storage& other) const
+	{
+		if (bool(m_ptr) ^ bool(other.m_ptr))
+			return false;
+
+		if (!m_ptr && !other.m_ptr)
+			return true;
+
+		return m_ptr->compare_equal(*other.m_ptr);
+	}
+
+	bool
+	compare_lt(const any_iterator_storage& other) const
+	{
+		if (!m_ptr || !other.m_ptr)
+			return false;
+
+		return m_ptr->compare_less_than(*other.m_ptr);
+	}
+
+	bool
+	compare_gt(const any_iterator_storage& other) const
+	{
+		if (!m_ptr || !other.m_ptr)
+			return false;
+
+		return other.m_ptr->compare_less_than(*m_ptr);
+	}
+
+	bool
+	compare_lte(const any_iterator_storage& other) const
+	{
+		if (!m_ptr || !other.m_ptr)
+			return false;
+
+		return !other.m_ptr->compare_less_than(*m_ptr);
+	}
+
+	bool
+	compare_gte(const any_iterator_storage& other) const
+	{
+		if (!m_ptr || !other.m_ptr)
+			return false;
+
+		return !m_ptr->compare_less_than(*other.m_ptr);
+	}
+
+	void
+	swap(any_iterator_storage& other) noexcept
+	{
+		swap(m_ptr, other.m_ptr);
+	}
+
+private:
+	unique_ptr<abstract_any_iterator<T>, asserting_pointer_validator> m_ptr;
 };
 
 } // namespace any_iterator
@@ -206,53 +352,45 @@ public:
 
 	using value_type = std::remove_cv_t<T>;
 	using reference = value_type;
-	using pointer = struct {
-		const value_type value;
-		const value_type*
-		operator->() const { return mtk::_addressof(value); }
-	};
+	using pointer = decltype(impl_core::any_iterator::any_iterator_storage<value_type>().address());
 	using difference_type = ptrdiff_t;
 	using iterator_category = std::input_iterator_tag;
 
 	template<class Iter
+#ifndef MTK_DOXYGEN
 		,_require<is_input_iterator_v<Iter>> = 0
-		,_require<std::is_same_v<iter::value_type<Iter>, value_type>> = 0>
+		,_require<std::is_same_v<iter::value_type<Iter>, value_type>> = 0
+#endif
+	>
 	any_input_iterator(Iter iter) :
-		m_ptr(mtk::make_unique<impl_core::any_iterator::any_iterator_storage<Iter, iter::value_type<Iter>>>(iter))
+		m_storage(mtk::_move(iter))
 	{ }
-
-	any_input_iterator(const any_input_iterator& other) :
-		m_ptr(other.m_ptr ? other.m_ptr->clone() : nullptr)
-	{ }
-
-	any_input_iterator(any_input_iterator&& other) :
-		m_ptr(mtk::_move(other.m_ptr))
-	{ }
-
-	any_input_iterator&
-	operator=(any_input_iterator rhs) noexcept
-	{
-		swap(m_ptr, rhs.m_ptr);
-		return *this;
-	}
 
 	reference
 	operator*() const
 	{
-		return m_ptr->dereference();
+		return m_storage.dereference();
 	}
 
 	pointer
 	operator->() const
 	{
-		return pointer{ **this };
+		return m_storage.address();
 	}
+
+	void
+	swap(any_input_iterator& other) noexcept
+	{
+		m_storage.swap(other.m_storage);
+	}
+
+
 
 	friend
 	any_input_iterator&
 	operator++(any_input_iterator& rhs)
 	{
-		rhs.m_ptr->increment();
+		rhs.m_storage.increment();
 		return rhs;
 	}
 
@@ -269,13 +407,7 @@ public:
 	bool
 	operator==(const any_input_iterator& lhs, const any_input_iterator& rhs)
 	{
-		if (bool(lhs.m_ptr) ^ bool(rhs.m_ptr))
-			return false;
-
-		if (!lhs.m_ptr && !rhs.m_ptr)
-			return true;
-
-		return lhs.m_ptr->compare_equal(*rhs.m_ptr);
+		return lhs.m_storage.compare_equal(rhs.m_storage);
 	}
 
 	friend
@@ -286,9 +418,15 @@ public:
 	}
 
 private:
-	using _abstract_iter_type = impl_core::any_iterator::abstract_any_iterator<value_type>;
-	unique_ptr<_abstract_iter_type, asserting_pointer_validator> m_ptr;
+	impl_core::any_iterator::any_iterator_storage<value_type> m_storage;
 };
+
+template<class T>
+void
+swap(any_input_iterator<T>& a, any_input_iterator<T>& b) noexcept
+{
+	a.swap(b);
+}
 
 
 
@@ -305,48 +443,44 @@ public:
 	using iterator_category = std::forward_iterator_tag;
 
 	any_forward_iterator() :
-		m_ptr()
+		m_storage()
 	{ }
 
 	template<class Iter
+#ifndef MTK_DOXYGEN
 		,_require<is_forward_iterator_v<Iter>> = 0
-		,_require<std::is_convertible_v<iter::reference<Iter>, reference>> = 0>
+		,_require<std::is_convertible_v<iter::reference<Iter>, reference>> = 0
+#endif
+	>
 	any_forward_iterator(Iter iter) :
-		m_ptr(mtk::make_unique<impl_core::any_iterator::any_iterator_storage<Iter, reference>>(iter))
+		m_storage(mtk::_move(iter))
 	{ }
-
-	any_forward_iterator(const any_forward_iterator& other) :
-		m_ptr(other.m_ptr ? other.m_ptr->clone() : nullptr)
-	{ }
-
-	any_forward_iterator(any_forward_iterator&& other) :
-		m_ptr(mtk::_move(other.m_ptr))
-	{ }
-
-	any_forward_iterator&
-	operator=(any_forward_iterator rhs) noexcept
-	{
-		swap(m_ptr, rhs.m_ptr);
-		return *this;
-	}
 
 	reference
 	operator*() const
 	{
-		return m_ptr->dereference();
+		return m_storage.dereference();
 	}
 
 	pointer
 	operator->() const
 	{
-		return mtk::_addressof(**this);
+		return m_storage.address();
 	}
+
+	void
+	swap(any_forward_iterator& other) noexcept
+	{
+		m_storage.swap(other.m_storage);
+	}
+
+
 
 	friend
 	any_forward_iterator&
 	operator++(any_forward_iterator& rhs)
 	{
-		rhs.m_ptr->increment();
+		rhs.m_storage.increment();
 		return rhs;
 	}
 
@@ -363,13 +497,7 @@ public:
 	bool
 	operator==(const any_forward_iterator& lhs, const any_forward_iterator& rhs)
 	{
-		if (bool(lhs.m_ptr) ^ bool(rhs.m_ptr))
-			return false;
-
-		if (!lhs.m_ptr && !rhs.m_ptr)
-			return true;
-
-		return lhs.m_ptr->compare_equal(*rhs.m_ptr);
+		return lhs.m_storage.compare_equal(rhs.m_storage);
 	}
 
 	friend
@@ -380,9 +508,15 @@ public:
 	}
 
 private:
-	using _abstract_iter_type = impl_core::any_iterator::abstract_any_iterator<reference>;
-	unique_ptr<_abstract_iter_type, asserting_pointer_validator> m_ptr;
+	impl_core::any_iterator::any_iterator_storage<reference> m_storage;
 };
+
+template<class T>
+void
+swap(any_forward_iterator<T>& a, any_forward_iterator<T>& b) noexcept
+{
+	a.swap(b);
+}
 
 
 
@@ -399,48 +533,44 @@ public:
 	using iterator_category = std::bidirectional_iterator_tag;
 
 	any_bidirectional_iterator() :
-		m_ptr()
+		m_storage()
 	{ }
 
 	template<class Iter
+#ifndef MTK_DOXYGEN
 		,_require<is_bidirectional_iterator_v<Iter>> = 0
-		,_require<std::is_convertible_v<iter::reference<Iter>, reference>> = 0>
+		,_require<std::is_convertible_v<iter::reference<Iter>, reference>> = 0
+#endif
+	>
 	any_bidirectional_iterator(Iter iter) :
-		m_ptr(mtk::make_unique<impl_core::any_iterator::any_iterator_storage<Iter, reference>>(iter))
+		m_storage(mtk::_move(iter))
 	{ }
-
-	any_bidirectional_iterator(const any_bidirectional_iterator& other) :
-		m_ptr(other.m_ptr ? other.m_ptr->clone() : nullptr)
-	{ }
-
-	any_bidirectional_iterator(any_bidirectional_iterator&& other) :
-		m_ptr(mtk::_move(other.m_ptr))
-	{ }
-
-	any_bidirectional_iterator&
-	operator=(any_bidirectional_iterator rhs) noexcept
-	{
-		swap(m_ptr, rhs.m_ptr);
-		return *this;
-	}
 
 	reference
 	operator*() const
 	{
-		return m_ptr->dereference();
+		return m_storage.dereference();
 	}
 
 	pointer
 	operator->() const
 	{
-		return mtk::_addressof(**this);
+		return m_storage.address();
 	}
+
+	void
+	swap(any_bidirectional_iterator& other) noexcept
+	{
+		m_storage.swap(other.m_storage);
+	}
+
+
 
 	friend
 	any_bidirectional_iterator&
 	operator++(any_bidirectional_iterator& rhs)
 	{
-		rhs.m_ptr->increment();
+		rhs.m_storage.increment();
 		return rhs;
 	}
 
@@ -457,7 +587,7 @@ public:
 	any_bidirectional_iterator&
 	operator--(any_bidirectional_iterator& rhs)
 	{
-		rhs.m_ptr->decrement();
+		rhs.m_storage.decrement();
 		return rhs;
 	}
 
@@ -474,13 +604,7 @@ public:
 	bool
 	operator==(const any_bidirectional_iterator& lhs, const any_bidirectional_iterator& rhs)
 	{
-		if (bool(lhs.m_ptr) ^ bool(rhs.m_ptr))
-			return false;
-
-		if (!lhs.m_ptr && !rhs.m_ptr)
-			return true;
-
-		return lhs.m_ptr->compare_equal(*rhs.m_ptr);
+		return lhs.m_storage.compare_equal(rhs.m_storage);
 	}
 
 	friend
@@ -491,9 +615,15 @@ public:
 	}
 
 private:
-	using _abstract_iter_type = impl_core::any_iterator::abstract_any_iterator<reference>;
-	unique_ptr<_abstract_iter_type, asserting_pointer_validator> m_ptr;
+	impl_core::any_iterator::any_iterator_storage<reference> m_storage;
 };
+
+template<class T>
+void
+swap(any_bidirectional_iterator<T>& a, any_bidirectional_iterator<T>& b) noexcept
+{
+	a.swap(b);
+}
 
 
 template<class T>
@@ -509,54 +639,50 @@ public:
 	using iterator_category = std::random_access_iterator_tag;
 
 	any_random_access_iterator() :
-		m_ptr()
+		m_storage()
 	{ }
 
 	template<class Iter
+#ifndef MTK_DOXYGEN
 		,_require<is_random_access_iterator_v<Iter>> = 0
-		,_require<std::is_convertible_v<iter::reference<Iter>, reference>> = 0>
+		,_require<std::is_convertible_v<iter::reference<Iter>, reference>> = 0
+#endif
+	>
 	any_random_access_iterator(Iter iter) :
-		m_ptr(mtk::make_unique<impl_core::any_iterator::any_iterator_storage<Iter, reference>>(iter))
+		m_storage(mtk::_move(iter))
 	{ }
-
-	any_random_access_iterator(const any_random_access_iterator& other) :
-		m_ptr(other.m_ptr ? other.m_ptr->clone() : nullptr)
-	{ }
-
-	any_random_access_iterator(any_random_access_iterator&& other) :
-		m_ptr(mtk::_move(other.m_ptr))
-	{ }
-
-	any_random_access_iterator&
-	operator=(any_random_access_iterator rhs) noexcept
-	{
-		swap(m_ptr, rhs.m_ptr);
-		return *this;
-	}
 
 	reference
 	operator*() const
 	{
-		return m_ptr->dereference();
+		return m_storage.dereference();
 	}
 
 	pointer
 	operator->() const
 	{
-		return mtk::_addressof(**this);
+		return m_storage.address();
 	}
 
 	reference
 	operator[](difference_type idx) const
 	{
-		return m_ptr->dereference(idx);
+		return m_storage.dereference(idx);
 	}
+
+	void
+	swap(any_random_access_iterator& other) noexcept
+	{
+		m_storage.swap(other.m_storage);
+	}
+
+
 
 	friend
 	any_random_access_iterator&
 	operator++(any_random_access_iterator& rhs)
 	{
-		rhs.m_ptr->increment();
+		rhs.m_storage.increment();
 		return rhs;
 	}
 
@@ -573,7 +699,7 @@ public:
 	any_random_access_iterator&
 	operator--(any_random_access_iterator& rhs)
 	{
-		rhs.m_ptr->decrement();
+		rhs.m_ptr.decrement();
 		return rhs;
 	}
 
@@ -590,7 +716,7 @@ public:
 	any_random_access_iterator&
 	operator+=(any_random_access_iterator& lhs, difference_type rhs)
 	{
-		lhs.m_ptr->increment(rhs);
+		lhs.m_storage.increment(rhs);
 		return lhs;
 	}
 
@@ -598,7 +724,7 @@ public:
 	any_random_access_iterator&
 	operator-=(any_random_access_iterator& lhs, difference_type rhs)
 	{
-		lhs.m_ptr->decrement(rhs);
+		lhs.m_storage.decrement(rhs);
 		return lhs;
 	}
 
@@ -627,20 +753,14 @@ public:
 	difference_type
 	operator-(const any_random_access_iterator& lhs, const any_random_access_iterator& rhs)
 	{
-		return lhs.m_ptr->difference(*rhs.m_ptr);
+		return lhs.m_storage.difference(rhs.m_storage);
 	}
 
 	friend
 	bool
 	operator==(const any_random_access_iterator& lhs, const any_random_access_iterator& rhs)
 	{
-		if (bool(lhs.m_ptr) ^ bool(rhs.m_ptr))
-			return false;
-
-		if (!lhs.m_ptr && !rhs.m_ptr)
-			return true;
-
-		return lhs.m_ptr->compare_equal(*rhs.m_ptr);
+		return lhs.m_storage.compare_equal(rhs.m_storage);
 	}
 
 	friend
@@ -654,46 +774,40 @@ public:
 	bool
 	operator<(const any_random_access_iterator& lhs, const any_random_access_iterator& rhs)
 	{
-		if (!lhs.m_ptr && !rhs.m_ptr)
-			return false;
-
-		return lhs.m_ptr->compare_less_than(*rhs.m_ptr);
+		return lhs.m_storage.compare_lt(rhs.m_storage);
 	}
 
 	friend
 	bool
 	operator>(const any_random_access_iterator& lhs, const any_random_access_iterator& rhs)
 	{
-		if (!lhs.m_ptr && !rhs.m_ptr)
-			return false;
-
-		return rhs.m_ptr->compare_less_than(*lhs.m_ptr);
+		return lhs.m_storage.compare_gt(rhs.m_storage);
 	}
 
 	friend
 	bool
 	operator<=(const any_random_access_iterator& lhs, const any_random_access_iterator& rhs)
 	{
-		if (!lhs.m_ptr && !rhs.m_ptr)
-			return false;
-
-		return !rhs.m_ptr->compare_less_than(*lhs.m_ptr);
+		return lhs.m_storage.compare_lte(rhs.m_storage);
 	}
 
 	friend
 	bool
 	operator>=(const any_random_access_iterator& lhs, const any_random_access_iterator& rhs)
 	{
-		if (!lhs.m_ptr && !rhs.m_ptr)
-			return false;
-
-		return !lhs.m_ptr->compare_less_than(*rhs.m_ptr);
+		return lhs.m_storage.compare_gte(rhs.m_storage);
 	}
 
 private:
-	using _abstract_iter_type = impl_core::any_iterator::abstract_any_iterator<reference>;
-	unique_ptr<_abstract_iter_type, asserting_pointer_validator> m_ptr;
+	impl_core::any_iterator::any_iterator_storage<reference> m_storage;
 };
+
+template<class T>
+void
+swap(any_random_access_iterator<T>& a, any_random_access_iterator<T>& b) noexcept
+{
+	a.swap(b);
+}
 
 } // namespace mtk
 
