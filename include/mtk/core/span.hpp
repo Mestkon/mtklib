@@ -1,6 +1,9 @@
 #ifndef MTK_CORE_SPAN_HPP
 #define MTK_CORE_SPAN_HPP
 
+//! @file
+//! Contains mtk::span
+
 #include <mtk/core/assert.hpp>
 #include <mtk/core/types.hpp>
 #include <mtk/core/impl/declval.hpp>
@@ -10,27 +13,52 @@
 
 namespace mtk {
 
+//! @addtogroup core
+//! @{
+
+//! @brief Represents an array as pointer and size.
+//!
+//! @code
+//! #include <mtk/core/span.h>
+//! @endcode
 template<class T>
 class span
 {
 public:
+	//! Typedef.
 	using element_type = T;
+	//! Typedef.
 	using value_type = std::remove_cv_t<T>;
+	//! Typedef.
 	using size_type = size_t;
+	//! Typedef.
 	using difference_type = ptrdiff_t;
+	//! Typedef.
 	using pointer = T*;
+	//! Typedef.
 	using const_pointer = const T*;
+	//! Typedef.
 	using reference = T&;
+	//! Typedef.
 	using const_reference = const T&;
+	//! Typedef.
 	using iterator = pointer;
 
+	//! Class variable to mach std::span.
 	static constexpr size_t extent = static_cast<size_t>(-1);
 
+	//! Constructs an empty span.
 	constexpr
 	span() noexcept :
 		span(nullptr, 0)
 	{ }
 
+	//! @brief Constructs a span from pointer and size.
+	//!
+	//! @pre U must be convertible to element_type.
+	//! @pre std::remove_cv_t<U> must be same as value_type.
+	//! @pre If count > 0 then data != nullptr.
+	//! @pre count must be <= the number of elements accessible from data.
 	template<class U
 #ifndef MTK_DOXYGEN
 		,_require<std::is_convertible_v<U, element_type>> = 0
@@ -45,12 +73,16 @@ public:
 		MTK_ASSERT((count == 0) || bool(data));
 	}
 
+	//! Constructs a span from a c-style array.
 	template<size_t N>
 	constexpr
 	span(element_type(&arr)[N]) noexcept :
 		span(arr, N)
 	{ }
 
+	//! @brief Constructs a span from a range/container.
+	//!
+	//! @pre span(r.data(), r.size()) must be valid.
 	template<class Range
 #ifndef MTK_DOXYGEN
 		,_require<std::is_convertible_v<std::remove_pointer_t<decltype(mtk::_declval<Range&>().data())>, element_type>> = 0
@@ -63,6 +95,9 @@ public:
 		span(r.data(), r.size())
 	{ }
 
+	//! @brief Constructs a span from a span with different type.
+	//!
+	//! @pre span(other.data(), other.size()) must be valid.
 	template<class U
 #ifndef MTK_DOXYGEN
 		,_require<std::is_convertible_v<U, element_type>> = 0
@@ -74,6 +109,7 @@ public:
 		span(other.data(), other.size())
 	{ }
 
+	//! Returns iterator to begin.
 	constexpr
 	iterator
 	begin() const noexcept
@@ -81,6 +117,7 @@ public:
 		return this->data();
 	}
 
+	//! Returns iterator to end.
 	constexpr
 	iterator
 	end() const noexcept
@@ -88,6 +125,9 @@ public:
 		return this->data() + this->size();
 	}
 
+	//! @brief Returns a reference to the first element.
+	//!
+	//! @pre !empty()
 	constexpr
 	reference
 	front() const
@@ -96,6 +136,9 @@ public:
 		return *this->begin();
 	}
 
+	//! @brief Returns a reference to the last element.
+	//!
+	//! @pre !empty()
 	constexpr
 	reference
 	back() const
@@ -104,6 +147,9 @@ public:
 		return *(this->end() - 1);
 	}
 
+	//! @brief Returns a reference to the idx'th element.
+	//!
+	//! @pre idx < size().
 	constexpr
 	reference
 	operator[](size_type idx) const
@@ -112,6 +158,7 @@ public:
 		return *(this->begin() + idx);
 	}
 
+	//! Returns a pointer to the array.
 	constexpr
 	pointer
 	data() const noexcept
@@ -119,6 +166,7 @@ public:
 		return m_ptr;
 	}
 
+	//! Returns the number of elements in the array.
 	constexpr
 	size_type
 	size() const noexcept
@@ -126,6 +174,7 @@ public:
 		return m_size;
 	}
 
+	//! Returns the number of bytes in the array.
 	constexpr
 	size_type
 	size_bytes() const noexcept
@@ -133,6 +182,7 @@ public:
 		return this->size()*sizeof(element_type);
 	}
 
+	//! Returns size() == 0.
 	[[nodiscard]]
 	constexpr
 	bool
@@ -141,6 +191,9 @@ public:
 		return (this->size() == 0);
 	}
 
+	//! @brief Returns the first count elements in the array as a span.
+	//!
+	//! @pre count <= size().
 	constexpr
 	span
 	first(size_type count) const
@@ -149,6 +202,9 @@ public:
 		return span(this->data(), count);
 	}
 
+	//! @brief Returns the last count elements in the array as a span.
+	//!
+	//! @pre count <= size().
 	constexpr
 	span
 	last(size_type count) const
@@ -157,6 +213,12 @@ public:
 		return span(this->data() + (this->size() - count), count);
 	}
 
+	//! @brief Returns count elements beginning at offset as a span.
+	//!
+	//! Retruns all elements after offset if count == extent.
+	//!
+	//! @pre offset <= size().
+	//! @pre count == extent || count <= (size - offset).
 	constexpr
 	span
 	subspan(size_type offset, size_type count = extent) const
@@ -171,11 +233,15 @@ private:
 	size_type m_size;
 };
 
+//! Deduction guide.
 template<class U>
 span(U*, size_t) -> span<U>;
 
+//! Deduction guide.
 template<class Range>
 span(Range&) -> span<std::remove_pointer_t<decltype(mtk::_declval<Range&>().data())>>;
+
+//! @}
 
 } // namespace mtk
 
