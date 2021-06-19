@@ -4,6 +4,7 @@
 //! @file
 //! Includes the core module
 
+#include <mtk/core/any_iterator.hpp>
 #include <mtk/core/array.hpp>
 #include <mtk/core/assert.hpp>
 #include <mtk/core/byte_cast.hpp>

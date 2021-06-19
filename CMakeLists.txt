@@ -21,6 +21,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core.hpp
+    include/mtk/core/any_iterator.hpp
     include/mtk/core/array.hpp
     include/mtk/core/assert.hpp
     include/mtk/core/byte_cast.hpp
@@ -54,6 +55,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/impl/swap.hpp
 
     src/mtk/core.cpp
+    src/mtk/core/any_iterator.cpp
     src/mtk/core/array.cpp
     src/mtk/core/assert.cpp
     src/mtk/core/exception.cpp
