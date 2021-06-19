@@ -48,23 +48,23 @@ _constexpr_strlen(const char* s) noexcept
 class zstring_view
 {
 public:
-	//! Typedef.
+	//! typedef for char.
 	using value_type = char;
-	//! Typedef.
+	//! typedef for char*.
 	using pointer = char*;
-	//! Typedef.
+	//! typedef for const char*.
 	using const_pointer = const char*;
-	//! Typedef.
+	//! typedef for char&.
 	using reference = char&;
-	//! Typedef.
+	//! typedef for const char&.
 	using const_reference = const char&;
-	//! Typedef.
+	//! typedef.
 	using iterator = const_pointer;
-	//! Typedef.
+	//! typedef.
 	using const_iterator = const_pointer;
-	//! Typedef.
+	//! typedef for size_t.
 	using size_type = size_t;
-	//! Typedef.
+	//! typedef for ptrdiff_t.
 	using difference_type = ptrdiff_t;
 
 	//! Constructs an empy zstring_view.
