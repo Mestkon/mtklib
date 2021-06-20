@@ -1,6 +1,9 @@
 #ifndef MTK_CORE_ANY_ITERATOR_HPP
 #define MTK_CORE_ANY_ITERATOR_HPP
 
+//! @file
+//! Contains mtk::any_*_iterators aka type-erased iterators.
+
 #include <mtk/core/iterator_traits.hpp>
 #include <mtk/core/preprocessor.hpp>
 #include <mtk/core/types.hpp>
@@ -15,6 +18,20 @@
 
 namespace mtk {
 
+//! @addtogroup core
+//! @{
+
+//! @brief Thrown by any_*_iterator when
+//! operation is not valid for given iterator.
+//!
+//! @code
+//! #include <mtk/core/any_iterator.hpp>
+//! @endcode
+//!
+//! - @ref any_input_iterator
+//! - @ref any_forward_iterator
+//! - @ref any_bidirectional_iterator
+//! - @ref any_random_access_iterator
 class bad_any_iterator_operation :
 	public std::exception
 {
@@ -344,18 +361,34 @@ private:
 
 
 
+//! @brief Type-erased input iterator.
+//!
+//! @code
+//! #include <mtk/core/any_iterator.hpp>
+//! @endcode
+//!
+//! @pre T must not be a reference type.
 template<class T>
 class any_input_iterator
 {
 public:
 	static_assert(!std::is_reference_v<T>, "T must be non-reference");
 
+	//! typedef.
 	using value_type = std::remove_cv_t<T>;
+	//! typedef.
 	using reference = value_type;
+	//! typedef.
 	using pointer = decltype(impl_core::any_iterator::any_iterator_storage<value_type>().address());
+	//! typedef.
 	using difference_type = ptrdiff_t;
+	//! typedef.
 	using iterator_category = std::input_iterator_tag;
 
+	//! @brief Constructs any_input_iterator from iter.
+	//!
+	//! @pre Iter must be at least an input iterator.
+	//! @pre std::iterator_traits<Iter>::value_type must be equal to value_type.
 	template<class Iter
 #ifndef MTK_DOXYGEN
 		,_require<is_input_iterator_v<Iter>> = 0
@@ -378,6 +411,7 @@ public:
 		return m_storage.address();
 	}
 
+	//! Swaps the contained iterators.
 	void
 	swap(any_input_iterator& other) noexcept
 	{
@@ -421,6 +455,9 @@ private:
 	impl_core::any_iterator::any_iterator_storage<value_type> m_storage;
 };
 
+//! @brief Swaps the contained iterators.
+//!
+//! @relates any_input_iterator
 template<class T>
 void
 swap(any_input_iterator<T>& a, any_input_iterator<T>& b) noexcept
@@ -430,22 +467,39 @@ swap(any_input_iterator<T>& a, any_input_iterator<T>& b) noexcept
 
 
 
+//! @brief Type-erased forward iterator.
+//!
+//! @code
+//! #include <mtk/core/any_iterator.hpp>
+//! @endcode
+//!
+//! @pre T must not be a reference type.
 template<class T>
 class any_forward_iterator
 {
 public:
 	static_assert(!std::is_reference_v<T>, "T must be non-reference");
 
+	//! typedef.
 	using value_type = std::remove_cv_t<T>;
+	//! typedef.
 	using reference = T&;
+	//! typedef.
 	using pointer = T*;
+	//! typedef.
 	using difference_type = ptrdiff_t;
+	//! typedef.
 	using iterator_category = std::forward_iterator_tag;
 
+	//! Default constructor.
 	any_forward_iterator() :
 		m_storage()
 	{ }
 
+	//! @brief Constructs any_forward_iterator from iter.
+	//!
+	//! @pre Iter must be at least a forward iterator.
+	//! @pre std::iterator_traits<Iter>::reference must be equal to reference.
 	template<class Iter
 #ifndef MTK_DOXYGEN
 		,_require<is_forward_iterator_v<Iter>> = 0
@@ -468,6 +522,7 @@ public:
 		return m_storage.address();
 	}
 
+	//! Swaps the contained iterators.
 	void
 	swap(any_forward_iterator& other) noexcept
 	{
@@ -511,6 +566,9 @@ private:
 	impl_core::any_iterator::any_iterator_storage<reference> m_storage;
 };
 
+//! @brief Swaps the contained iterators.
+//!
+//! @relates any_forward_iterator
 template<class T>
 void
 swap(any_forward_iterator<T>& a, any_forward_iterator<T>& b) noexcept
@@ -520,22 +578,39 @@ swap(any_forward_iterator<T>& a, any_forward_iterator<T>& b) noexcept
 
 
 
+//! @brief Type-erased bidirectional iterator.
+//!
+//! @code
+//! #include <mtk/core/any_iterator.hpp>
+//! @endcode
+//!
+//! @pre T must not be a reference type.
 template<class T>
 class any_bidirectional_iterator
 {
 public:
 	static_assert(!std::is_reference_v<T>, "T must be non-reference");
 
+	//! typedef.
 	using value_type = std::remove_cv_t<T>;
+	//! typedef.
 	using reference = T&;
+	//! typedef.
 	using pointer = T*;
+	//! typedef.
 	using difference_type = ptrdiff_t;
+	//! typedef.
 	using iterator_category = std::bidirectional_iterator_tag;
 
+	//! Default constructor.
 	any_bidirectional_iterator() :
 		m_storage()
 	{ }
 
+	//! @brief Constructs any_bidirectional_iterator from iter.
+	//!
+	//! @pre Iter must be at least a bidirectional iterator.
+	//! @pre std::iterator_traits<Iter>::reference must be equal to reference.
 	template<class Iter
 #ifndef MTK_DOXYGEN
 		,_require<is_bidirectional_iterator_v<Iter>> = 0
@@ -558,6 +633,7 @@ public:
 		return m_storage.address();
 	}
 
+	//! Swaps the contained iterators.
 	void
 	swap(any_bidirectional_iterator& other) noexcept
 	{
@@ -618,6 +694,9 @@ private:
 	impl_core::any_iterator::any_iterator_storage<reference> m_storage;
 };
 
+//! @brief Swaps the contained iterators.
+//!
+//! @relates any_bidirectional_iterator
 template<class T>
 void
 swap(any_bidirectional_iterator<T>& a, any_bidirectional_iterator<T>& b) noexcept
@@ -626,22 +705,40 @@ swap(any_bidirectional_iterator<T>& a, any_bidirectional_iterator<T>& b) noexcep
 }
 
 
+
+//! @brief Type-erased random access iterator.
+//!
+//! @code
+//! #include <mtk/core/any_iterator.hpp>
+//! @endcode
+//!
+//! @pre T must not be a reference type.
 template<class T>
 class any_random_access_iterator
 {
 public:
 	static_assert(!std::is_reference_v<T>, "T must be non-reference");
 
+	//! typedef.
 	using value_type = std::remove_cv_t<T>;
+	//! typedef.
 	using reference = T&;
+	//! typedef.
 	using pointer = T*;
+	//! typedef.
 	using difference_type = ptrdiff_t;
+	//! typedef.
 	using iterator_category = std::random_access_iterator_tag;
 
+	//! Default constructor.
 	any_random_access_iterator() :
 		m_storage()
 	{ }
 
+	//! @brief Constructs any_random_access_iterator from iter.
+	//!
+	//! @pre Iter must be at least a random access iterator.
+	//! @pre std::iterator_traits<Iter>::reference must be equal to reference.
 	template<class Iter
 #ifndef MTK_DOXYGEN
 		,_require<is_random_access_iterator_v<Iter>> = 0
@@ -670,6 +767,7 @@ public:
 		return m_storage.dereference(idx);
 	}
 
+	//! Swaps the contained iterators.
 	void
 	swap(any_random_access_iterator& other) noexcept
 	{
@@ -802,12 +900,17 @@ private:
 	impl_core::any_iterator::any_iterator_storage<reference> m_storage;
 };
 
+//! @brief Swaps the contained iterators.
+//!
+//! @relates any_random_access_iterator
 template<class T>
 void
 swap(any_random_access_iterator<T>& a, any_random_access_iterator<T>& b) noexcept
 {
 	a.swap(b);
 }
+
+//! @}
 
 } // namespace mtk
 
