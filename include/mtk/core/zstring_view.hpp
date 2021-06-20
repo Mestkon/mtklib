@@ -370,7 +370,11 @@ inline namespace zstring_view_literals {
 //! @addtogroup core
 //! @{
 
-//! Returns the string literal as a zstring_view.
+//! @brief Returns the string literal as a zstring_view.
+//!
+//! @code
+//! #include <mtk/core/zstring_view.hpp>
+//! @endcode
 constexpr
 zstring_view
 operator""_zv(const char* str, size_t len) noexcept
