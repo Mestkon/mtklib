@@ -22,6 +22,7 @@
 #include <mtk/core/saturate_cast.hpp>
 #include <mtk/core/scope_exit.hpp>
 #include <mtk/core/span.hpp>
+#include <mtk/core/trigonometry.hpp>
 #include <mtk/core/types.hpp>
 #include <mtk/core/unique_ptr.hpp>
 #include <mtk/core/version.hpp>

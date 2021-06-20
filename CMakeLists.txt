@@ -39,6 +39,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/saturate_cast.hpp
     include/mtk/core/scope_exit.hpp
     include/mtk/core/span.hpp
+    include/mtk/core/trigonometry.hpp
     include/mtk/core/types.hpp
     include/mtk/core/unique_ptr.hpp
     include/mtk/core/version.hpp
@@ -61,6 +62,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     src/mtk/core/exception.cpp
     src/mtk/core/narrow_cast.cpp
     src/mtk/core/nullptr_exception.cpp
+    src/mtk/core/trigonometry.cpp
     src/mtk/core/zstring_view.cpp
 )
 
