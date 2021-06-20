@@ -7,7 +7,7 @@
 #include <mtk/core/saturate_cast.hpp>
 #include <mtk/core/impl/require.hpp>
 
-#include <stdexcept>
+#include <exception>
 #include <type_traits>
 
 namespace mtk {
