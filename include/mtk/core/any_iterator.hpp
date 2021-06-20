@@ -455,16 +455,6 @@ private:
 	impl_core::any_iterator::any_iterator_storage<value_type> m_storage;
 };
 
-//! @brief Swaps the contained iterators.
-//!
-//! @relates any_input_iterator
-template<class T>
-void
-swap(any_input_iterator<T>& a, any_input_iterator<T>& b) noexcept
-{
-	a.swap(b);
-}
-
 
 
 //! @brief Type-erased forward iterator.
@@ -565,16 +555,6 @@ public:
 private:
 	impl_core::any_iterator::any_iterator_storage<reference> m_storage;
 };
-
-//! @brief Swaps the contained iterators.
-//!
-//! @relates any_forward_iterator
-template<class T>
-void
-swap(any_forward_iterator<T>& a, any_forward_iterator<T>& b) noexcept
-{
-	a.swap(b);
-}
 
 
 
@@ -693,16 +673,6 @@ public:
 private:
 	impl_core::any_iterator::any_iterator_storage<reference> m_storage;
 };
-
-//! @brief Swaps the contained iterators.
-//!
-//! @relates any_bidirectional_iterator
-template<class T>
-void
-swap(any_bidirectional_iterator<T>& a, any_bidirectional_iterator<T>& b) noexcept
-{
-	a.swap(b);
-}
 
 
 
@@ -900,6 +870,41 @@ private:
 	impl_core::any_iterator::any_iterator_storage<reference> m_storage;
 };
 
+//! @}
+
+
+
+//! @brief Swaps the contained iterators.
+//!
+//! @relates any_input_iterator
+template<class T>
+void
+swap(any_input_iterator<T>& a, any_input_iterator<T>& b) noexcept
+{
+	a.swap(b);
+}
+
+
+//! @brief Swaps the contained iterators.
+//!
+//! @relates any_forward_iterator
+template<class T>
+void
+swap(any_forward_iterator<T>& a, any_forward_iterator<T>& b) noexcept
+{
+	a.swap(b);
+}
+
+//! @brief Swaps the contained iterators.
+//!
+//! @relates any_bidirectional_iterator
+template<class T>
+void
+swap(any_bidirectional_iterator<T>& a, any_bidirectional_iterator<T>& b) noexcept
+{
+	a.swap(b);
+}
+
 //! @brief Swaps the contained iterators.
 //!
 //! @relates any_random_access_iterator
@@ -909,8 +914,6 @@ swap(any_random_access_iterator<T>& a, any_random_access_iterator<T>& b) noexcep
 {
 	a.swap(b);
 }
-
-//! @}
 
 } // namespace mtk
 
