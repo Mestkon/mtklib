@@ -33,11 +33,11 @@ template<class T
 class not_null
 {
 public:
-	//! typedef for T*.
+	//! typedef.
 	using pointer_type = T*;
-	//! typedef for T.
+	//! typedef.
 	using element_type = T;
-	//! typedef for Validator.
+	//! typedef.
 	using validator_type = Validator;
 
 	//! Constructs a not_null initialized to ptr. Invokes validator on ptr.
@@ -149,11 +149,11 @@ template<class T
 class not_null<T[], Validator>
 {
 public:
-	//! typedef for T*.
+	//! typedef.
 	using pointer_type = T*;
-	//! typedef for T.
+	//! typedef.
 	using element_type = T;
-	//! typedef for Validator.
+	//! typedef.
 	using validator_type = Validator;
 
 	//! @brief Constructs a not_null initialized to p. Invokes validator on p.

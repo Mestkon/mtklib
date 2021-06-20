@@ -67,16 +67,26 @@ template<class T
 class array
 {
 public:
+	//! typedef.
 	using value_type = T;
+	//! typedef.
 	using size_type = size_t;
+	//! typedef.
 	using difference_type = ptrdiff_t;
+	//! typedef.
 	using reference = value_type&;
+	//! typedef.
 	using const_reference = const value_type&;
+	//! typedef.
 	using pointer = value_type*;
+	//! typedef.
 	using const_pointer = const value_type*;
+	//! typedef.
 	using iterator = pointer;
+	//! typedef.
 	using const_iterator = const_pointer;
 
+	//! Class variable to match std::array
 	static constexpr size_type extent = N;
 
 
@@ -285,16 +295,26 @@ template<class T>
 class array<T, dynamic_extent>
 {
 public:
+	//! typedef.
 	using value_type = T;
+	//! typedef.
 	using size_type = size_t;
+	//! typedef.
 	using difference_type = ptrdiff_t;
+	//! typedef.
 	using reference = value_type&;
+	//! typedef.
 	using const_reference = const value_type&;
+	//! typedef.
 	using pointer = value_type*;
+	//! typedef.
 	using const_pointer = const value_type*;
+	//! typedef.
 	using iterator = pointer;
+	//! typedef.
 	using const_iterator = const_pointer;
 
+	//! Class variable to match std::array.
 	static constexpr size_type extent = dynamic_extent;
 
 

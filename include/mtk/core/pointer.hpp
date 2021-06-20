@@ -33,11 +33,11 @@ template<class T
 class pointer
 {
 public:
-	//! typedef for T*.
+	//! typedef.
 	using pointer_type = T*;
-	//! typedef for T.
+	//! typedef.
 	using element_type = T;
-	//! typedef for Validator.
+	//! typedef.
 	using validator_type = Validator;
 
 	//! Constructs a pointer initialized to nullptr.
@@ -158,11 +158,11 @@ template<class T
 class pointer<T[], Validator>
 {
 public:
-	//! typedef for T*.
+	//! typedef.
 	using pointer_type = T*;
-	//! typedef for T.
+	//! typedef.
 	using element_type = T;
-	//! typedef for Validator.
+	//! typedef.
 	using validator_type = Validator;
 
 	//! Constructs a pointer initialized to nullptr.

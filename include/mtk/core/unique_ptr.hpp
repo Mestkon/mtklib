@@ -34,13 +34,13 @@ template<class T
 class unique_ptr
 {
 public:
-	//! typedef for T*.
+	//! typedef.
 	using pointer_type = T*;
-	//! typedef for pointer_type.
+	//! typedef.
 	using pointer = pointer_type;
-	//! typedef for T.
+	//! typedef.
 	using element_type = T;
-	//! typedef for Validator.
+	//! typedef.
 	using validator_type = Validator;
 
 	//! Constructs a unique_ptr initialized to nullptr.
@@ -203,13 +203,13 @@ template<class T
 class unique_ptr<T[], Validator>
 {
 public:
-	//! typedef for T*.
+	//! typedef.
 	using pointer_type = T*;
-	//! typedef for pointer_type.
+	//! typedef.
 	using pointer = pointer_type;
-	//! typedef for T.
+	//! typedef.
 	using element_type = T;
-	//! typedef for Validator.
+	//! typedef.
 	using validator_type = Validator;
 
 	//! Constructs a unique_ptr initialized to nullptr.

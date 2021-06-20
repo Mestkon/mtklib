@@ -25,21 +25,21 @@ template<class T>
 class span
 {
 public:
-	//! typedef for T.
+	//! typedef.
 	using element_type = T;
-	//! typedef for remove_cv_t<T>.
+	//! typedef.
 	using value_type = std::remove_cv_t<T>;
-	//! typedef for size_t.
+	//! typedef.
 	using size_type = size_t;
-	//! typedef for ptrdiff_t.
+	//! typedef.
 	using difference_type = ptrdiff_t;
-	//! typedef for T*.
+	//! typedef.
 	using pointer = T*;
-	//! typedef for const T*.
+	//! typedef.
 	using const_pointer = const T*;
-	//! typedef for T&.
+	//! typedef.
 	using reference = T&;
-	//! typedef for const T&.
+	//! typedef.
 	using const_reference = const T&;
 	//! typedef.
 	using iterator = pointer;
