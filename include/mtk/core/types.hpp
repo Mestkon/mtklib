@@ -17,35 +17,87 @@ inline namespace types {
 //! @addtogroup core
 //! @{
 
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using llong = long long;
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using ldouble = long double;
 
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using schar = signed char;
 
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using uchar = unsigned char;
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using ushort = unsigned short;
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using uint = unsigned int;
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using ulong = unsigned long;
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using ullong = unsigned long long;
 
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using byte = uchar;
 
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using std::size_t;
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using std::ptrdiff_t;
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using std::intptr_t;
-//! Typedef.
+//! @brief typedef.
+//!
+//! @code
+//! #include <mtk/core/types.hpp>
+//! @endcode
 using std::uintptr_t;
 
 #if (defined(INT8_MAX) && defined(INT16_MAX) && defined(INT32_MAX) && defined(INT64_MAX) && \
@@ -59,22 +111,54 @@ using std::uintptr_t;
 	//! @endcode
 	#define MTK_FIXED_WIDTH_INTS
 
-	//! Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//!
+	//! @code
+	//! #include <mtk/core/types.hpp>
+	//! @endcode
 	using int8_t = std::int8_t;
-	//! Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//!
+	//! @code
+	//! #include <mtk/core/types.hpp>
+	//! @endcode
 	using int16_t = std::int16_t;
-	//! Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//!
+	//! @code
+	//! #include <mtk/core/types.hpp>
+	//! @endcode
 	using int32_t = std::int32_t;
-	//! Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//!
+	//! @code
+	//! #include <mtk/core/types.hpp>
+	//! @endcode
 	using int64_t = std::int64_t;
 
-	//! Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//!
+	//! @code
+	//! #include <mtk/core/types.hpp>
+	//! @endcode
 	using uint8_t = std::uint8_t;
-	//! Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//!
+	//! @code
+	//! #include <mtk/core/types.hpp>
+	//! @endcode
 	using uint16_t = std::uint16_t;
-	//! Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//!
+	//! @code
+	//! #include <mtk/core/types.hpp>
+	//! @endcode
 	using uint32_t = std::uint32_t;
-	//! Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INTS.
+	//!
+	//! @code
+	//! #include <mtk/core/types.hpp>
+	//! @endcode
 	using uint64_t = std::uint64_t;
 
 #endif
