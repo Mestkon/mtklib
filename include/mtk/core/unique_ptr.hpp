@@ -366,17 +366,6 @@ private:
 	pointer_type m_ptr;
 };
 
-//! @brief Swaps the contained pointers.
-//!
-//! @relates unique_ptr
-template<class T
-	,class V>
-void
-swap(unique_ptr<T, V>& a, unique_ptr<T, V>& b) noexcept
-{
-	a.swap(b);
-}
-
 //! @brief Constructs an object of type T and wraps it in unique_ptr.
 //!
 //! @pre T must not be an array type.
@@ -411,6 +400,19 @@ make_unique(size_t n)
 	return unique_ptr<T>(new std::remove_extent_t<T>[n]());
 }
 
+//! @}
+
+//! @brief Swaps the contained pointers.
+//!
+//! @relates unique_ptr
+template<class T
+	,class V>
+void
+swap(unique_ptr<T, V>& a, unique_ptr<T, V>& b) noexcept
+{
+	a.swap(b);
+}
+
 //! @brief Returns lhs.get() == rhs.get()
 //!
 //! @relates unique_ptr.
@@ -434,8 +436,6 @@ operator!=(const unique_ptr<T, V1>& lhs, const unique_ptr<T, V2>& rhs) noexcept
 {
 	return (lhs.get() != rhs.get());
 }
-
-//! @}
 
 } // namespace mtk
 
