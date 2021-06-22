@@ -161,6 +161,35 @@ using std::uintptr_t;
 	//! @endcode
 	using uint64_t = std::uint64_t;
 
+	#if (defined(__GNUC__) && defined(__SIZEOF_INT128__)) || \
+		defined(MTK_DOXYGEN)
+
+		#pragma GCC diagnostic push
+		#pragma GCC diagnostic ignored "-Wpedantic"
+
+		//! @brief Defined if int128_t and uint128_t is available.
+		//!
+		//! @code
+		//! #include <mtk/core/types.h>
+		//! @endcode
+		#define MTK_FIXED_WIDTH_INT128
+
+		//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INT128.
+		//!
+		//! @code
+		//! #include <mtk/core/types.h>
+		//! @endcode
+		using int128_t = __int128;
+		//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INT128.
+		//!
+		//! @code
+		//! #include <mtk/core/types.h>
+		//! @endcode
+		using uint128_t = unsigned __int128;
+
+		#pragma GCC diagnostic pop
+	#endif
+
 #endif
 
 //! @}
