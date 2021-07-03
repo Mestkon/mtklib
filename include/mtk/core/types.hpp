@@ -75,30 +75,47 @@ using ullong = unsigned long long;
 //! @endcode
 using byte = uchar;
 
-//! @brief typedef.
+//! @brief Import into mtk..
 //!
 //! @code
 //! #include <mtk/core/types.hpp>
 //! @endcode
-using std::size_t;
-//! @brief typedef.
+using size_t = std::size_t;
+//! @brief Import into mtk..
 //!
 //! @code
 //! #include <mtk/core/types.hpp>
 //! @endcode
-using std::ptrdiff_t;
-//! @brief typedef.
-//!
-//! @code
-//! #include <mtk/core/types.hpp>
-//! @endcode
-using std::intptr_t;
-//! @brief typedef.
-//!
-//! @code
-//! #include <mtk/core/types.hpp>
-//! @endcode
-using std::uintptr_t;
+using ptrdiff_t = std::ptrdiff_t;
+
+
+
+#if (defined INTPTR_MAX && defined UINTPTR_MAX) || \
+	defined(MTK_DOXYGEN)
+
+	//! @brief Defined if intptr_t and uintptr_t are available.
+	//!
+	//! @code
+	//! #include <mtk/core/types.hpp>
+	//! @endcode
+	#define MTK_FIXED_WIDTH_INTPTR
+
+	//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INTPTR.
+	//!
+	//! @code
+	//! #include <mtk/core/types.hpp>
+	//! @endcode
+	using intptr_t = std::intptr_t;
+	//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INTPTR.
+	//!
+	//! @code
+	//! #include <mtk/core/types.hpp>
+	//! @endcode
+	using uintptr_t = std::uintptr_t;
+
+#endif
+
+
 
 #if (defined(INT8_MAX) && defined(INT16_MAX) && defined(INT32_MAX) && defined(INT64_MAX) && \
 	defined(UINT8_MAX) && defined(UINT16_MAX) && defined(UINT32_MAX) && defined(UINT64_MAX)) || \
@@ -160,36 +177,37 @@ using std::uintptr_t;
 	//! #include <mtk/core/types.hpp>
 	//! @endcode
 	using uint64_t = std::uint64_t;
+#endif
 
-	#if (defined(__GNUC__) && defined(__SIZEOF_INT128__)) || \
-		defined(MTK_DOXYGEN)
 
-		#pragma GCC diagnostic push
-		#pragma GCC diagnostic ignored "-Wpedantic"
 
-		//! @brief Defined if int128_t and uint128_t is available.
-		//!
-		//! @code
-		//! #include <mtk/core/types.h>
-		//! @endcode
-		#define MTK_FIXED_WIDTH_INT128
+#if (defined(__GNUC__) && defined(__SIZEOF_INT128__)) || \
+	defined(MTK_DOXYGEN)
 
-		//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INT128.
-		//!
-		//! @code
-		//! #include <mtk/core/types.h>
-		//! @endcode
-		using int128_t = __int128;
-		//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INT128.
-		//!
-		//! @code
-		//! #include <mtk/core/types.h>
-		//! @endcode
-		using uint128_t = unsigned __int128;
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wpedantic"
 
-		#pragma GCC diagnostic pop
-	#endif
+	//! @brief Defined if int128_t and uint128_t is available.
+	//!
+	//! @code
+	//! #include <mtk/core/types.h>
+	//! @endcode
+	#define MTK_FIXED_WIDTH_INT128
 
+	//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INT128.
+	//!
+	//! @code
+	//! #include <mtk/core/types.h>
+	//! @endcode
+	using int128_t = __int128;
+	//! @brief Import into mtk. See @ref MTK_FIXED_WIDTH_INT128.
+	//!
+	//! @code
+	//! #include <mtk/core/types.h>
+	//! @endcode
+	using uint128_t = unsigned __int128;
+
+	#pragma GCC diagnostic pop
 #endif
 
 //! @}
