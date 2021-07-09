@@ -13,6 +13,7 @@
 #include <mtk/core.hpp>
 #include <mtk/linalg.hpp>
 #include <mtk/ranges.hpp>
+#include <mtk/network.hpp>
 
 //! All non-macro symbols are defined inside this namespace.
 namespace mtk {

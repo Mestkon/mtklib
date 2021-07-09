@@ -91,4 +91,10 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     src/mtk/linalg.cpp
 )
 
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+    include/mtk/network.hpp
+
+    src/mtk/network.cpp
+)
+
 
