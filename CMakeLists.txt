@@ -32,6 +32,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/core/narrow_cast.hpp
     include/mtk/core/not_null.hpp
     include/mtk/core/nullptr_exception.hpp
+    include/mtk/core/os.hpp
     include/mtk/core/overload.hpp
     include/mtk/core/pointer.hpp
     include/mtk/core/preprocessor.hpp
@@ -62,6 +63,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     src/mtk/core/exception.cpp
     src/mtk/core/narrow_cast.cpp
     src/mtk/core/nullptr_exception.cpp
+    src/mtk/core/os.cpp
     src/mtk/core/trigonometry.cpp
     src/mtk/core/zstring_view.cpp
 )
