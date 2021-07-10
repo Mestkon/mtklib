@@ -93,8 +93,14 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     include/mtk/network.hpp
+    include/mtk/network/inet_address.hpp
+    include/mtk/network/impl/address.hpp
 
     src/mtk/network.cpp
+    src/mtk/network/inet_address.cpp
+    src/mtk/network/unix/address.inl
+    src/mtk/network/windows/address.inl
+    src/mtk/network/impl.cpp
 )
 
 
