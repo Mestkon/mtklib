@@ -1,6 +1,7 @@
 #ifndef MTK_NETWORK_INET_ADDRESS_HPP
 #define MTK_NETWORK_INET_ADDRESS_HPP
 
+#include <mtk/core/assert.hpp>
 #include <mtk/core/types.hpp>
 #include <mtk/core/zstring_view.hpp>
 
@@ -59,10 +60,18 @@ public:
 	}
 
 	const ipv4_address&
-	ipv4() const noexcept;
+	ipv4() const noexcept
+	{
+		MTK_ASSERT(m_proto == inet_protocol::ipv4);
+		return m_ipv4;
+	}
 
 	const ipv6_address&
-	ipv6() const noexcept;
+	ipv6() const noexcept
+	{
+		MTK_ASSERT(m_proto == inet_protocol::ipv6);
+		return m_ipv6;
+	}
 
 	std::string
 	to_string() const;

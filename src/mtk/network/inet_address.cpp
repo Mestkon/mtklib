@@ -1,6 +1,5 @@
 #include <mtk/network/inet_address.hpp>
 
-#include <mtk/core/assert.hpp>
 #include <mtk/core/byte_cast.hpp>
 #include <mtk/network/impl/address.hpp>
 
@@ -28,20 +27,6 @@ inet_address::inet_address(zstring_view address, uint32_t flow, uint32_t scope) 
 			std::memcpy(&m_ipv4.data, addr.value, sizeof(m_ipv4.data));
 		}
 	}
-}
-
-const ipv4_address&
-inet_address::ipv4() const noexcept
-{
-	MTK_ASSERT(m_proto == inet_protocol::ipv4);
-	return m_ipv4;
-}
-
-const ipv6_address&
-inet_address::ipv6() const noexcept
-{
-	MTK_ASSERT(m_proto == inet_protocol::ipv6);
-	return m_ipv6;
 }
 
 std::string
