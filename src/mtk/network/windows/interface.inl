@@ -8,7 +8,7 @@
 #include <winsock2.h>
 #include <iphlpapi.h>
 #include <iptypes.h>
-#include <Ws2tcpip.h>
+#include <ws2tcpip.h>
 
 namespace mtk {
 

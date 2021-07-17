@@ -3,7 +3,6 @@
 #include <mtk/core/assert.hpp>
 
 #include <ws2tcpip.h>
-#include <Wsk.h>
 
 namespace mtk {
 
