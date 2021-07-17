@@ -47,6 +47,13 @@ template<class Iter
 	,bool IsRow>
 class _matrix_vector_iterator;
 
+
+
+//MSVC cant handle this inline...
+template<class T
+	,class... Args>
+inline constexpr bool _fold_is_convertible_to = (std::is_convertible_v<Args, T> && ...);
+
 } // namespace impl_matrix
 
 
@@ -187,6 +194,8 @@ struct _is_matrix_compatible
 	static constexpr bool is_mat_comp = ((mat_a::row_dimension == mat_b::row_dimension) && (mat_a::column_dimension == mat_b::column_dimension));
 	static constexpr bool value = (is_vector ? is_vec_comp : is_mat_comp) && std::is_same_v<typename mat_a::value_type, typename mat_b::value_type>;
 };
+
+
 
 template<class Mat>
 constexpr
@@ -2214,7 +2223,7 @@ public:
 	template<class... Args
 #ifndef MTK_DOXYGEN
 		,_require<(sizeof...(Args) == R*C)> = 0
-		,_require<(std::is_convertible_v<Args, S> && ...)> = 0
+		,_require<impl_matrix::_fold_is_convertible_to<S, Args...>> = 0
 		,matrix_options O = Opt
 		,_require<(O & matrix_options::column_major) != matrix_options::column_major> = 0
 #endif
@@ -2227,7 +2236,7 @@ public:
 #ifndef MTK_DOXYGEN
 	template<class... Args
 		,_require<(sizeof...(Args) == R*C)> = 0
-		,_require<(std::is_convertible_v<Args, S> && ...)> = 0
+		,_require<impl_matrix::_fold_is_convertible_to<S, Args...>> = 0
 		,matrix_options O = Opt
 		,_require<(O & matrix_options::column_major) == matrix_options::column_major> = 0>
 	constexpr
