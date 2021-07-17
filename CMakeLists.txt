@@ -11,6 +11,10 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE include)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic")
 
+if (WIN32)
+    target_link_libraries(${CMAKE_PROJECT_NAME} ws2_32 iphlpapi)
+endif()
+
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     add_definitions(-DMTK_DEBUG)
 endif()
