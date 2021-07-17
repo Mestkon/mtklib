@@ -2,7 +2,9 @@
 
 #include <mtk/core/assert.hpp>
 
+#include <codecvt>
 #include <cstring>
+#include <locale>
 #include <memory>
 
 #include <winsock2.h>
@@ -50,13 +52,16 @@ _get_network_interfaces(bool& err)
 		return { };
 	}
 
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+
 	std::list<_interface_entry> ret;
 	for (auto* iface = addresses.get(); iface != nullptr; iface = iface->Next) {
-		if (!iface->AdapterName || !iface->FirstUnicastAddress)
+		if (!iface->FriendlyName || !iface->FirstUnicastAddress)
 			continue;
 
 		_interface_entry entry;
-		entry.name = std::string(iface->AdapterName);
+		std::wstring friendly_name = (iface->FriendlyName);
+		entry.name = converter.to_bytes(friendly_name);
 		if (iface->IfIndex != 0)
 			entry.index = iface->IfIndex;
 		else
