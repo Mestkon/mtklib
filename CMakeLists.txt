@@ -9,7 +9,11 @@ add_library(${CMAKE_PROJECT_NAME} STATIC "")
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE include)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic")
+if (MSVC)
+    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE /W4)
+else()
+    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
+endif()
 
 if (WIN32)
     target_link_libraries(${CMAKE_PROJECT_NAME} ws2_32 iphlpapi)
